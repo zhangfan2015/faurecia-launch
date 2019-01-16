@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/jquery-2.0.3.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="/faurecia-launch/pages/css/basic.css">
+    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
+    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/bootstrap.min.js'></script>
+    <script src="/faurecia-launch/pages/manager/assets/js/bootbox.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var height = document.documentElement.clientHeight;
+    console.log("height:"+height);
+    console.log("width:"+document.documentElement.clientWidth);
+    var emheight=document.documentElement.clientHeight*0.26;
+    document.documentElement.style.fontSize = document.documentElement.clientWidth / 3840 + 'px';
+    $(document).ready(function(){
+//        $("embed").css("width","700");
+        $("#title").height(height/10);
+        $("#pdfList").height(height*0.92)
+        initProgram();
+        var s = setInterval("initProgram()",1000*60*15);
+        $("#logo1").click(function () {
+            if(document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen){
+                exitFullScreen();
+            }else{
+                fullScreen();
+            }
+
+        })
+
+    });
+
+    var websocket = null;
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        //http://localhost:8080/AD/wx/createMenu
+//        websocket = new WebSocket("ws://192.168.67.145:8080/faurecia-launch/websocket");
+        websocket = new WebSocket("ws://10.166.199.28:8080/faurecia-launch/websocket");
+    }
+    else {
+//            alert('当前浏览器 Not supcport websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        setMessageInnerHTML("WebSocket连接发生错误");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+        setMessageInnerHTML("WebSocket连接成功");
+
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+//        setMessageInnerHTML(event.data);
+        if(event.data=="update"){
+            initProgram();
+        }
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        setMessageInnerHTML("WebSocket连接关闭");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        closeWebSocket();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+//            alert(innerHTML);
+    }
+
+    //关闭WebSocket连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send(word) {
+//            var message = document.getElementById('text').value;
+        websocket.send(word);
+    }
+
+    function createLaunchList(id) {
+        $.post("../launch/getPdfList",{programId:id},function(result){
+            $(".program-item").hide(1000,function () {
+                $("#pdfList").empty();
+                for(var x in result.bizObject){
+                    var launch = result.bizObject[x];
+
+                    $("#pdfList").append("<div onclick=showpdf('"+launch.id+"') class='pdf-item'> " +
+                        "<div class='pdf-name' >"+launch.launchType+"</div> " +
+                        "<div class='pdf-back'></div> " +
+                        "<embed class='pdf-file'  src='"+launch.fileUrl+"' type='application/pdf'  ></embed> " +
+                        "</div>")
+                }
+                $("#logo1").show();
+                $(".pdf-item").width(document.documentElement.clientWidth*0.22);
+                $(".pdf-item").height(emheight);
+
+                $(".pdf-back").width(document.documentElement.clientWidth*0.22);
+                $(".pdf-back").height(emheight*0.70)
+
+                $(".pdf-name").width(document.documentElement.clientWidth*0.22);
+                $(".pdf-name").height(emheight*0.30)
+                $(".pdf-name").css({"line-height":emheight*0.3+"px"});
+
+                $("embed").width(document.documentElement.clientWidth*0.22+17)
+                $("embed").height(emheight+10)
+
+
+
+            });
+
+
+        })
+    }
+    function initProgram() {
+        $("#pdfList").attr("class","pdfList");
+            $.post("../launch/getProgramList",function (result) {
+                $("#pdfList").empty();
+                var htmlString =" " ;
+                for (var y in result.bizObject){
+                    var program =result.bizObject[y];
+                    htmlString+="<div class='program-item'><div class='program-name' onclick='createLaunchList("+program.id+")'>"+program.name+"</div> "+
+                    "<div class='pic-list'> " +
+                    "<div class='scoll-son'> " ;
+                    for (var x in program.piclist) {
+                        var pic = program.piclist[x];
+                        htmlString+="<img onclick=showpic('"+pic.picUrl+"') class='pic-file'  src='"+pic.picUrl+"'  /> ";
+                    }
+                    htmlString+="</div> " +
+                        "</div> </div>" ;
+                }
+                $("#pdfList").append(htmlString);
+                $(".program-item").width(document.documentElement.clientWidth*0.3);
+
+                $(".program-item").height(emheight);
+            })
+
+
+    }
+    function createProgram() {
+        $(".pdf-back").hide();
+        $(".pdf-item").hide(1000,function () {
+            $.post("../launch/getProgramList",function (result) {
+                $("#pdfList").empty();
+                var htmlString =" " ;
+                for (var y in result.bizObject){
+                    var program =result.bizObject[y];
+                    htmlString+="<div class='program-item'><div class='program-name' onclick='createLaunchList("+program.id+")'>"+program.name+"</div> "+
+                    "<div class='pic-list'>" +
+                    "<div class='scoll-son'>";
+                    for (var x in program.piclist) {
+                        var pic = program.piclist[x];
+                        htmlString+="<img onclick=showpic('"+pic.picUrl+"') class='pic-file'  src='"+pic.picUrl+"'  /> ";
+                    }
+                    htmlString+="</div> " +
+                    "</div></div> " ;
+                }
+                $("#pdfList").append(htmlString);
+                $(".program-item").width(document.documentElement.clientWidth*0.3);
+                $(".program-item").height(emheight);
+            })
+
+
+        })
+
+
+    }
+    function showpic(url) {
+        var form = $("<img style='height: 500px;margin: auto' src='"+url+"'  />");
+        var div = bootbox.dialog({
+            title:"图片详情",
+            message: form,
+            animate: true,
+            buttons: {
+                "close": {
+                    "label": "<i class='icon-remove'></i> 关闭",
+                    "className": "btn-sm"
+                }
+            }
+
+        });
+    }
+
+    function showpdf(id) {
+        $.post("../launch/getPdfById",{id:id},function (result) {
+            var form = $("<embed class='bigpdf'style='width: 99%;height: 500px' src='"+result.bizObject.fileUrl+"' type='application/pdf'  ></embed>");
+            var div = bootbox.dialog({
+                title: result.bizObject.name,
+                message: form,
+                animate: true,
+                buttons: {
+                    "close": {
+                        "label": "<i class='icon-remove'></i> 关闭",
+                        "className": "btn-sm"
+                    }
+                }
+
+            });
+        })
+    }
+
+    function loadImage(objImg) {
+        AutoResizeImage(0,height/12,objImg);
+
+    }
+
+
+    function fullScreen() {
+        var elem = document.body;
+        if (elem.webkitRequestFullScreen) {
+            elem.webkitRequestFullScreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.requestFullScreen) {
+            elem.requestFullscreen();
+        } else {
+            notice.notice_show("浏览器不支持全屏API或已被禁用", null, null, null, true, true);
+        }
+    }
+    function exitFullScreen() {
+        var elem = document;
+        if (elem.webkitCancelFullScreen) {
+            elem.webkitCancelFullScreen();
+        } else if (elem.mozCancelFullScreen) {
+            elem.mozCancelFullScreen();
+        } else if (elem.cancelFullScreen) {
+            elem.cancelFullScreen();
+        } else if (elem.exitFullscreen) {
+            elem.exitFullscreen();
+        } else {
+            notice.notice_show("浏览器不支持全屏API或已被禁用", null, null, null, true, true);
+        }
+    }
+
+
+        function AutoResizeImage(maxWidth,maxHeight,objImg){
+        var img = new Image();
+        img.src = objImg.src;
+        var hRatio;
+        var wRatio;
+        var Ratio = 1;
+        var w = img.width;
+        var h = img.height;
+        wRatio = maxWidth / w;
+        hRatio = maxHeight / h;
+        if (maxWidth ==0 && maxHeight==0){
+            Ratio = 1;
+        }else if (maxWidth==0){//
+            if (hRatio<1) Ratio = hRatio;
+        }else if (maxHeight==0){
+            if (wRatio<1) Ratio = wRatio;
+        }else if (wRatio<1 || hRatio<1){
+            Ratio = (wRatio<=hRatio?wRatio:hRatio);
+        }
+        if (Ratio<1){
+            w = w * Ratio;
+            h = h * Ratio;
+        }
+        objImg.height = h;
+        objImg.width = w;
+    }
+</script>
+<img src="image/bkground.jpg"  style="position:fixed;
+top: 0;
+left: 0;
+width:100%;
+height:100%;
+z-index:-10;
+zoom: 1;"/>
+<div id="title" class="title">
+    <img id="logo1"  src="image/log5.png" style="position: fixed;left: 3%" onload="loadImage(this)">
+    <div onClick="initProgram()"style="text-align: center;width: 100%;display: flex;flex-direction: column;">
+        <div style="color: gainsboro;font-size: 100rem;overflow-y: hidden">FCM QD PROGRAM LAUNCH BOARD</div>
+        <div style="color: #687dae;font-size: 30rem;overflow-y: hidden">Fauriecia Exhaust Systems QingDao Co.,Ltd.</div>
+    </div>
+</div>
+<div id="pdfList" class="pdfList">
+
+    <!--<div class="pdf-item">-->
+        <!--<h2 class="pdf-name">XXXXXX文档</h2>-->
+        <!--<embed class="pdf-file"src="http://localhost:8080/pages/1.pdf" type="application/pdf"  ></embed>-->
+    <!--</div>-->
+
+
+
+
+</div>
+</div>
+</body>
+</html>

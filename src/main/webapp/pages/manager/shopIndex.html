@@ -1,0 +1,614 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>爱丁美肤中心后台管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- basic styles -->
+
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="assets/css/dropzone.css" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<link rel="stylesheet" href="assets/css/jquery-ui-1.10.3.custom.min.css" />
+
+		<!-- fonts -->
+
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script src="assets/js/ace-extra.min.js"></script>
+        <script src="assets/js/dropzone.min.js"></script>
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+		<script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+	</head>
+
+	<body>
+		<div class="navbar navbar-default" id="navbar">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+
+                $(document).ready(function() {
+                    init();
+                });
+
+
+
+
+                function init() {
+                    $.post("../manager/getShopBannerList",function(result){
+                        for (var x=1 in result.bizObject[0]){
+                            var banner = result.bizObject[0][x];
+
+                                var htmlString = "<div id='picContent"+banner.id+"'style='width: 700px; float: left;margin-left: 50px'>"+
+                                "<div style='width: 700px; float: left;margin-left: 50px'>"+
+                                "<div style='display:inline'>"+
+                                "<img alt='商品轮播图'  id='bannerPic"+banner.id+"' style=' width: 700px;height: 400px;overflow: hidden' src='"+banner.picUrl+"' />"+
+
+//                            图片上传弹框
+                                "<div id='upload"+banner.id+"' style='display: none;margin-top: -300px;margin-left: 150px;width: 400px' class=' position-relative col-xs-12 col-sm-3 widget-container-span ui-sortable'>"+
+                                "<div class='widget-box light-border'>"+
+                                "<div class='widget-header header-color-dark'>"+
+                                "<h5 class='smaller'>图片1上传</h5>"+
+                                "</div>"+
+                                "<div class='widget-body'>"+
+                                "<div class='widget-main padding-6'>"+
+
+                                "<form id='uploadForm' enctype='multipart/form-data'>"+
+//                            "<div style='display: none; name='shop'><input type='text' name='index' value='"+banner.id+"'></div>"+
+//                            "<div style='display: none; name='shop'><input type='text' name='pictype' value='shop'></div>"+
+
+
+
+                                "   <div class='alert alert-info'>            <input id='banner"+banner.id+"'name='pic'type='file'/> </div>"+
+                                "   <button class='btn btn-info' style='margin-left: 90px' onclick='hideUpload("+banner.id+")'>"+
+                                "   <i class='icon-pencil'>取消</i>"+
+                                "   </button>"+
+                                "   <button class='btn btn-info' onclick='upload("+banner.id+")'  style='float: left;margin-left: 60px;'>"+
+                                "   <i type='submit' class='icon-pencil'>上传</i>"+
+                                "   </button>"+
+                                " </form>"+
+                                "   </div>"+
+                                "   </div>"+
+                                "   </div>"+
+                                "   </div>"+
+
+
+                                "   <div id='delPop"+banner.id+"'  style=' display:none;margin-top: -300px;margin-left: 150px;width: 400px'  class='position-relative col-xs-12 col-sm-6 widget-container-span ui-sortable'>"+
+                                "   <div class='widget-box'>"+
+                                "   <div class='widget-header header-color-pink'>"+
+                                "   <h5>删除图片？</h5>"+
+                                "</div>"+
+
+                                "<div class='widget-body'>"+
+                                "   <div class='widget-main'>"+
+                                "   <p class='alert alert-info'>"+
+                                "   确定删除图片吗？删除后将不可恢复！"+
+                                "</p>"+
+
+                                "</div>"+
+
+                                "<div class='widget-toolbox padding-8 clearfix'>"+
+                                "   <button onclick='delPic("+banner.id+")' class='btn btn-xs btn-danger pull-left'>"+
+                                "   <i class='icon-remove'></i>"+
+                                "   <span class='bigger-110'>删除！</span>"+
+                                "</button>"+
+
+                                "<button onclick='hidePop("+banner.id+")' class='btn btn-xs btn-success pull-right'>"+
+                                "   <span class='bigger-110'>取消</span>"+
+
+                                "   <i class='icon-arrow-right icon-on-right'></i>"+
+                                "   </button>"+
+                                "   </div>"+
+                                "   </div>"+
+                                "   </div>"+
+                                "   </div>"+
+
+                                "   <button class='btn btn-danger'  onclick='delPop("+banner.id+")' style=' float:right; margin-bottom: 50px; width: 300px'>"+
+                                "   <i class='icon-pencil'>删除图片</i>"+
+                                "   </button>"+
+                                "   <button class='btn btn-info' id='uploadPic' onclick='uploadUrlPop("+banner.id+")' style='float:left;margin-bottom: 50px;width: 300px'>"+
+                                "   <i class='icon-pencil'>添加跳转页面图片</i>"+
+                                "   </button>"+
+                                "   </div>"+
+                                "   </div>";
+
+						if(banner.jumpUrl){
+                            htmlString+= "<div id='uploadUrlPop'style='width: 400px; float: left;margin-left: 50px'>"+
+                                "<div style='display:inline'>"+
+                                "<img alt='请上传跳转用图片' id='jumpUrl"+banner.id+"' style=' width: 400px;height: 400px;overflow: hidden' src='"+banner.jumpUrl+"' />"+
+                                "<div id='uploadUrl"+banner.id+"' style='display: none;margin-top: -300px;width: 400px' class=' position-relative col-xs-12 col-sm-3 widget-container-span ui-sortable'>"+
+                                "<div class='widget-box light-border'>"+
+                                "<div class='widget-header header-color-dark'>"+
+                                "<h5 class='smaller'>图片2上传</h5>"+
+                                "</div>"+
+                                "<div class='widget-body'>"+
+                                "<div class='widget-main padding-6'>"+
+                                "<form id='uploadForm1' enctype='multipart/form-data'>"+
+                                "<div class='alert alert-info'>" +
+                                " <input type='file' id='jumpPicFile"+banner.id+"' name='pic' /> " +
+                                "</div>"+
+                                "<button class='btn btn-info' style='margin-left: 90px' onclick='hideUrlUpload("+banner.id+")'>"+
+                                "<i class='icon-pencil'>取消</i>"+
+                                "</button>"+
+                                "<button class='btn btn-info' onclick='upload("+banner.id+")' style='float: left;margin-left: 60px;'>"+
+                                "<i type='submit' class='icon-pencil'>上传</i>"+
+                                "</button>"+
+                                "</from>"+
+                                "</div>"+
+                                "</div>"+
+                                "</div>"+
+                                "</div>"+
+
+
+                                "<div id='delUrlPop"+banner.id+"'  style=' display:none;margin-top: -300px;width: 400px'  class='position-relative col-xs-12 col-sm-6 widget-container-span ui-sortable'>"+
+                                "<div class='widget-box'>"+
+                                "<div class='widget-header header-color-pink'>"+
+                                "<h5>删除图片？</h5>"+
+                                "</div>"+
+
+                                "<div class='widget-body'>"+
+                                "<div class='widget-main'>"+
+                                "<p class='alert alert-info'>"+
+                                "确定删除图片吗？删除后将不可恢复！"+
+                                "</p>"+
+
+                                "</div>"+
+
+                                "<div class='widget-toolbox padding-8 clearfix'>"+
+                                "<button onclick='deljumpUrl("+banner.id+")' class='btn btn-xs btn-danger pull-left'>"+
+                                "<i class='icon-remove'></i>"+
+                                "<span class='bigger-110'>删除！</span>"+
+                                "</button>"+
+
+                                "<button onclick='hideUrlPop("+banner.id+")' class='btn btn-xs btn-success pull-right'>"+
+                                "<span class='bigger-110'>取消</span>"+
+
+                                "<i class='icon-arrow-right icon-on-right'></i>"+
+                                "</button>"+
+                                "</div>"+
+                                "</div>"+
+                                "</div>"+
+                                "</div>"+
+
+                                "<button class='btn btn-danger'  onclick='delUrlPop("+banner.id+")' style='  margin-bottom: 50px; width: 400px'>"+
+                                "<i class='icon-pencil'>删除2图片</i>"+
+                                "</button>"+
+                                "</div>"+
+                                "</div>";
+						}
+//                            <!--轮播图跳转页面图片-->
+
+                            $("#content").append( htmlString);
+                        }
+
+                    });
+                }
+
+
+
+
+
+
+				function newPic() {
+                    $("#newUpload").fadeIn(100);
+                }
+                function uploadPop(x) {
+                    $("#upload"+x).fadeIn(100);
+                }
+                function  upload(x) {
+                    alert(x);
+				    if(x){
+                        var data = {
+                            "pictype":"shopPicUrl",
+                            "id":x
+                            // 上传参数
+                        };
+                        $.ajaxFileUpload({
+                            url:"../manager/uploadPic", //这里是关键，这里地址必须和必须和本地地址一样，不然违反同源策略，  这样写的url:"http://www.baidu.com/mobilechat"是不行的。如果确实需要跨域提交，需要加一个中间层。 也可以用jsonp
+                            secureuri:false,
+                            data:data,    //参数这里不能这样写$('.registerform').serialize(), 因为我传递的是JSON格式的数据。$('#form1').serialize()传递的参数不是这样的格式。
+                            fileElementId:'jumpPicFile'+x, //文件选择框的id属性
+                            dataType: 'json',   //服务器返回的格式，可以是json ,也可以是jsonp
+                            success:function(data,msg){
+                                $('#jumpUrl'+banner.id).attr('src',data.bizObject);
+                            },
+                            error:function(data){
+                            }
+                        });
+                    }else {
+                        var data = {
+                            "pictype":"shop"
+                            // 上传参数
+                        };
+                        $.ajaxFileUpload({
+                            url:"../manager/uploadPic", //这里是关键，这里地址必须和必须和本地地址一样，不然违反同源策略，  这样写的url:"http://www.baidu.com/mobilechat"是不行的。如果确实需要跨域提交，需要加一个中间层。 也可以用jsonp
+                            secureuri:false,
+                            data:data,    //参数这里不能这样写$('.registerform').serialize(), 因为我传递的是JSON格式的数据。$('#form1').serialize()传递的参数不是这样的格式。
+                            fileElementId:'newpic', //文件选择框的id属性
+                            dataType: 'json',   //服务器返回的格式，可以是json ,也可以是jsonp
+                            success:function(data,msg){
+                               init();
+                            },
+                            error:function(data){
+                            }
+                        });
+                    }
+
+                }
+                function deljumpUrl(x) {
+                    alert(x);
+                    $.post("../manager/delPic",{id:x,type:"jumpUrl"},function(result){
+                        $('#jumpUrl'+x).attr('src','');
+                        $("#delUrlPop"+x).fadeOut(100);
+                    });
+                }
+                function delPic(x) {
+
+
+                    $.post("../manager/delPic",{id:x,type:"banner"},function(result){
+//                        init();
+                    });
+                    $("#delPop"+x).fadeOut(100);
+                    $("#picContent"+x).fadeOut(100);
+                }
+                function uploadUrlPop(x) {
+                    $("#uploadUrl"+x).fadeIn(100);
+//                    $("#upload"+x).fadeIn(100)
+                }
+             function hideUpload(x) {
+                 $("#upload"+x).fadeOut(100);
+                 $("#newUpload").fadeOut(100);
+             }
+             function hideUrlUpload(x) {
+                 $("#uploadUrl"+x).fadeOut(100);
+             }
+            function delPop(x) {
+                $("#delPop"+x).fadeIn(100);
+            }
+            function delUrlPop(x) {
+                $("#delUrlPop"+x).fadeIn(100);
+//                delPic(x);
+            }
+
+            function delUrl() {
+                hideUrlPop();
+            }
+            function hidePop(x) {
+                $("#upload"+x).fadeOut(100);
+                $("#delPop"+x).fadeOut(100);
+            }
+            function hideUrlPop(x) {
+                    alert(x);
+                $("#delUrlPop"+x).fadeOut(100);
+            }
+
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="#" class="navbar-brand">
+						<small>
+							<i class="icon-leaf"></i>
+							爱丁美肤中心
+						</small>
+					</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+
+				<div class="navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+						<li class="light-blue">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
+								<span class="user-info">
+									<small>Welcome,</small>
+									Jason
+								</span>
+
+								<i class="icon-caret-down"></i>
+							</a>
+
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="#">
+										<i class="icon-cog"></i>
+										修改密码
+									</a>
+								</li>
+								<li class="divider"></li>
+
+								<li>
+									<a href="#">
+										<i class="icon-off"></i>
+										登出
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar">
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+					</script>
+
+
+
+					<ul class="nav nav-list">
+						<li class="active open">
+							<a href="shopIndex.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 布局设置 </span>
+							</a>
+							<ul class="submenu">
+								<li class="active">
+									<a href="shopIndex.html">
+										<i class="icon-double-angle-right"></i>
+										商城首页
+									</a>
+								</li>
+
+								<li>
+									<a href="shopGood.html">
+										<i class="icon-double-angle-right"></i>
+										商品图片
+									</a>
+								</li>
+
+								<li>
+									<a href="shopItem.html">
+										<i class="icon-double-angle-right"></i>
+										项目图片
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="good.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 商品管理 </span>
+							</a>
+						</li>
+                        <li>
+                            <a href="apply.html" class="dropdown-toggle">
+                                <i class="icon-list"></i>
+                                <span class="menu-text"> 申请记录 </span>
+                            </a>
+                        </li>
+						<li>
+							<a href="appointment.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 预约记录 </span>
+							</a>
+						</li>
+						<li>
+							<a href="userManagment.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 用户管理 </span>
+							</a>
+						</li>
+						<li>
+							<a href="coupons.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 卡券管理 </span>
+							</a>
+						</li>
+						<li>
+							<a href="tequan.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 特权管理 </span>
+							</a>
+						</li>
+						<li>
+							<a href="orderManagment.html" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 订单管理 </span>
+							</a>
+						</li>
+
+					</ul><!-- /.nav-list -->
+
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+					</div>
+
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+					</script>
+				</div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="#">布局设置</a>
+							</li>
+
+							<li>
+								<a href="#">商城首页</a>
+							</li>
+
+						</ul><!-- .breadcrumb -->
+					</div>
+
+					<div class="page-content">
+						<div class="page-header">
+							<h1>
+								商城首页
+								<small>
+									<i class="icon-double-angle-right"></i>
+									首页轮播图片设置
+                                    <button class="btn btn-xs btn-success" onclick="newPic()">
+                                        添加图片
+                                    </button>
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div  class="tabbable">
+									<ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+										<li class="active">
+											<a data-toggle="tab" href="#faq-tab-1">
+
+												首页轮播
+											</a>
+										</li>
+									</ul>
+
+									<div  class="tab-content no-border padding-24" >
+										<div id="faq-tab-1"  class="tab-pane fade in active">
+                                            <div id="content"style="width: 1500px;display:inline">
+                                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+										</div>
+									</div>
+								</div>
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+			</div><!-- /.main-container-inner -->
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+        <div id="newUpload" style="display: none;top:100px;left:43%;width: 400px;z-index: 999;" class=" position-absolute col-xs-12 col-sm-3 widget-container-span ui-sortable">
+            <form id='uploadForm' enctype='multipart/form-data'>
+                <div class="widget-box light-border">
+                    <div class="widget-header header-color-dark">
+                        <h5 class="smaller">图片上传</h5>
+                    </div>
+                    <div class="widget-body">
+                        <div class="widget-main padding-6">
+                            <div class="alert alert-info"> <input id="newpic" name='pic' type="file"/> </div>
+                            <button class="btn btn-info" style="margin-left: 90px" onclick="hideUpload()">
+                                <i class="icon-pencil">取消</i>
+                            </button>
+                            <button class="btn btn-info" style="float: left;margin-left: 60px;" onclick="upload()">
+                                <i class="icon-pencil">上传</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+		<!--[if !IE]> -->
+
+		<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+<!--<![endif]&ndash;&gt;-->
+
+		<!--&lt;!&ndash;[if !IE]> &ndash;&gt;-->
+
+		<!--<script type="text/javascript">-->
+			<!--window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");-->
+		<!--</script>-->
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<!--<script type="text/javascript">-->
+ <!--window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");-->
+<!--</script>-->
+<!--<![endif]&ndash;&gt;-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('.accordion').on('hide', function (e) {
+					$(e.target).prev().children(0).addClass('collapsed');
+				})
+				$('.accordion').on('show', function (e) {
+					$(e.target).prev().children(0).removeClass('collapsed');
+				})
+			});
+		</script>
+</body>
+</html>

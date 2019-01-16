@@ -1,0 +1,96 @@
+*{
+    font-family:  Arial;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.title{
+    display: flex;
+    margin: 4% auto;
+    flex-direction: row;
+    position: fixed;
+    width: 100%;
+    height: 10%;
+}
+.pdfList{
+    overflow-x:hidden;
+    overflow-y: auto;
+    width: 101%;
+    margin-left:1.5%;
+    margin-top: 10%;
+
+}
+
+.pdf-item{
+    float:left;
+    display: flex;
+    flex-direction: column;
+    margin:1.1%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+}
+.pdf-name{
+    background-color: whitesmoke;
+    color: black;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    z-index:100;
+    overflow: hidden;
+;
+
+}
+.pdf-file{
+    margin-top: -57%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.pdf-back{
+    background-color: whitesmoke;
+    z-index: -1;
+    opacity: 0.4;
+
+}
+
+
+
+.program-item{
+    float: left;
+    background-color: cornflowerblue;
+    margin: 1%;
+    border-radius: 10px;
+
+}
+.program-name{
+    margin-left: 5%;
+    height: 70px;
+    line-height: 70px;
+    font-size: 20px;
+    text-align: center;
+    color: whitesmoke;
+    overflow: hidden;
+}
+.scoll-son{
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    overflow-y: hidden;
+}
+.pic-list{
+    height: 80px;
+    padding: 0 5%;
+    overflow:scroll;
+    overflow-x: auto;
+    overflow-y: hidden;;
+
+
+}
+.element::-webkit-scrollbar {display:none}
+.pic-file{
+    margin: 0 1.4%;
+    width: 100px;
+    height: 75px;
+}

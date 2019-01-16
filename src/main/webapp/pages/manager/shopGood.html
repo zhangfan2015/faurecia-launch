@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>图片修改</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- basic styles -->
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css"/>
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css"/>
+    <![endif]-->
+
+    <!-- page specific plugin styles -->
+
+    <link rel="stylesheet" href="assets/css/jquery-ui-1.10.3.custom.min.css"/>
+    <!-- fonts -->
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="assets/css/ace.min.css"/>
+    <link rel="stylesheet" href="assets/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="assets/css/ace-skins.min.css"/>
+    <script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="assets/css/ace-ie.min.css"/>
+    <![endif]-->
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+
+    <script src="assets/js/ace-extra.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body>
+<div class="navbar navbar-default" id="navbar">
+    <script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+
+        $(document).ready(function () {
+            init();
+
+
+        });
+        function upLoad(picIndex,pictype,elementId,imgId) {
+            alert(imgId);
+            var data = {
+                "pictype":pictype,
+                "picIndex":picIndex
+                // 上传参数
+            };
+            $.ajaxFileUpload({
+                url:"../manager/uploadPic", //这里是关键，这里地址必须和必须和本地地址一样，不然违反同源策略，  这样写的url:"http://www.baidu.com/mobilechat"是不行的。如果确实需要跨域提交，需要加一个中间层。 也可以用jsonp
+                secureuri:false,
+                data:data,    //参数这里不能这样写$('.registerform').serialize(), 因为我传递的是JSON格式的数据。$('#form1').serialize()传递的参数不是这样的格式。
+                fileElementId:elementId, //文件选择框的id属性
+                dataType: 'json',   //服务器返回的格式，可以是json ,也可以是jsonp
+                success:function(data,msg){
+                    $("#"+imgId).attr('src',data.bizObject);
+                },
+                error:function(data){
+                }
+            });
+        }
+
+        function init() {
+            $.post("../manager/getShopBannerList", function (result) {
+                for (var x in result.bizObject[1]) {
+                    var banner = result.bizObject[1][x];
+                    $("#shopGood" + (parseInt(x)+1)).attr('src', banner.picUrl);
+                }
+
+            });
+        }
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <div class="navbar-header pull-left">
+            <a href="#" class="navbar-brand">
+                <small>
+                    <i class="icon-leaf"></i>
+                    爱丁美肤中心
+                </small>
+            </a><!-- /.brand -->
+        </div><!-- /.navbar-header -->
+
+        <div class="navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo"/>
+                        <span class="user-info">
+									<small>Welcome,</small>
+									Jason
+								</span>
+
+                        <i class="icon-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a href="#">
+                                <i class="icon-cog"></i>
+                                修改密码
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="#">
+                                <i class="icon-off"></i>
+                                登出
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul><!-- /.ace-nav -->
+        </div><!-- /.navbar-header -->
+    </div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'fixed')
+                } catch (e) {
+                }
+            </script>
+
+
+            <ul class="nav nav-list">
+                <li class="active open">
+                    <a href="index.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 布局设置 </span>
+                    </a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="shopIndex.html">
+                                <i class="icon-double-angle-right"></i>
+                                商城首页
+                            </a>
+                        </li>
+
+                        <li class="active">
+                            <a href="shopGood.html">
+                                <i class="icon-double-angle-right"></i>
+                                商品图片
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="shopItem.html">
+                                <i class="icon-double-angle-right"></i>
+                                项目图片
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="good.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 商品管理 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="apply.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 申请记录 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="appointment.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 预约记录 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="userManagment.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 用户管理 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="coupons.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 卡券管理 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="tequan.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 特权管理 </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orderManagment.html" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text"> 订单管理 </span>
+                    </a>
+                </li>
+
+
+
+            </ul><!-- /.nav-list -->
+
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+                   data-icon2="icon-double-angle-right"></i>
+            </div>
+
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'collapsed')
+                } catch (e) {
+                }
+            </script>
+        </div>
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try {
+                        ace.settings.check('breadcrumbs', 'fixed')
+                    } catch (e) {
+                    }
+                </script>
+
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home home-icon"></i>
+                        <a href="#">布局设置</a>
+                    </li>
+
+                    <li>
+                        <a href="#">商品图片</a>
+                    </li>
+
+                </ul><!-- .breadcrumb -->
+            </div>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>
+                        商品图片
+                        <small>
+                            <i class="icon-double-angle-right"></i>
+                            商品图设置
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#faq-tab-1">
+                                        <i class="purple icon-magic bigger-120"></i>
+                                        首页商品图
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#faq-tab-2">
+                                        <i class="purple icon-magic bigger-120"></i>
+                                        商品一详情页
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#faq-tab-3">
+                                        <i class="purple icon-magic bigger-120"></i>
+                                        商品二详情页
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#faq-tab-4">
+                                        <i class="purple icon-magic bigger-120"></i>
+                                        商品三详情页
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content no-border padding-24">
+                                <div id="faq-tab-1" class="tab-pane fade in active">
+                                    <div id="content" style="width: 750px;float:left">
+                                        <h4 class="lighter" style="width: 40%;float: left;margin-left: 50px;">
+                                            <i class="icon-hand-down icon-animated-hand-pointer blue"></i>
+                                            <a href="#modal-wizard" data-toggle="modal"
+                                               class="pink">图片尺寸：750px*400px </a>
+                                        </h4>
+                                        <div style="width: 750px; float: left;margin-left: 50px">
+                                            <div style="display:inline">
+                                                <img id="shopGood1" alt="商品主图" style="width:750px;"
+                                                     src="../images/banner.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadShopGoodForm1' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-top:2px;width: 374px;'>
+                                                    </input>
+                                                    <!--picIndex,pictype,elementId,imgId-->
+                                                    <button class='btn btn-info' onclick='upLoad(1,"good","uploadShopGoodForm1","shopGood1")'
+                                                            style='float:right;margin-bottom: 50px;margin-top:2px;width: 374px;height: 45px;'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div style="width: 750px;display:inline;float:left">
+                                        <h4 class="lighter" style="width: 100%;float: left;margin-left: 50px;">
+                                            <i class="icon-hand-down icon-animated-hand-pointer blue"></i>
+                                            <a href="#modal-wizard" data-toggle="modal" class="pink">图片尺寸：250px*250px </a>
+                                        </h4>
+                                        <div style="width: 200px;margin-left: 50px;float: right">
+                                            <div style="display:inline">
+                                                <img id="shopGood2" alt="商品2辅图" style="width: 200px;"
+                                                     src="../images/banner.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadShopGoodForm2' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-bottom: 2px;margin-top:2px;width: 200px'>
+                                                    </input>
+                                                    <button class='btn btn-info' onclick='upLoad(2,"good","uploadShopGoodForm2","shopGood2")'
+                                                            style='float:right;margin-bottom: 50px;width: 200px'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div style="width: 200px;margin-left: 50px;float: right">
+                                            <div style="display:inline">
+                                                <img id="shopGood3" alt="商品3辅图" style="width: 200px;"
+                                                     src="../images/banner.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadShopGoodForm3' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-bottom: 2px;margin-top:2px;width: 200px'>
+                                                    </input>
+                                                    <button class='btn btn-info' onclick='upLoad(3,"good","uploadShopGoodForm3","shopGood3")'
+                                                            style='float:right;margin-bottom: 50px;width: 200px'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div style="width: 200px;margin-left: 50px;float: right">
+                                            <div style="display:inline">
+                                                <img id="shopGood4" alt="商品4辅图" style="width: 200px;"
+                                                     src="../images/banner.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadShopGoodForm4' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-bottom: 2px;margin-top:2px;width: 200px'>
+                                                    </input>
+                                                    <button class='btn btn-info' onclick='upLoad(4,"good","uploadShopGoodForm4","shopGood4")'
+                                                            style='float:right;margin-bottom: 50px;width: 200px'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="faq-tab-2" class="tab-pane fade">
+                                    <!--<div  style="width: 750px;float:left">-->
+                                        <!--<h4 class="lighter" style="width: 40%;float: left;margin-left: 50px;">-->
+                                            <!--<i class="icon-hand-down icon-animated-hand-pointer blue"></i>-->
+                                            <!--<a href="#modal-wizard" data-toggle="modal"-->
+                                               <!--class="pink">商品图片banner：750px*400px </a>-->
+                                        <!--</h4>-->
+                                        <!--<div style="width: 750px; float: left;margin-left: 50px">-->
+                                            <!--<div style="display:inline">-->
+                                                <!--<img id="Good0Banner" alt="商品1主图" style="width:750px;"-->
+                                                     <!--src="../images/banner.jpg"/>-->
+                                                <!--<form  enctype='multipart/form-data'>-->
+                                                    <!--<input id='shopBanner' class='btn btn-info' type="file" name='pic'-->
+                                                           <!--style='float:left;margin-top:2px;width: 374px;'>-->
+                                                    <!--</input>-->
+                                                    <!--<button class='btn btn-info' onclick='upLoad("shopBanner",1)'-->
+                                                            <!--style='float:right;margin-bottom: 50px;margin-top:2px;width: 374px;height: 45px;'>-->
+                                                        <!--<i class='icon-pencil'>修改</i>-->
+                                                    <!--</button>-->
+                                                <!--</form>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <div style="width: 800px;display:inline;float:left">
+                                        <h4 class="lighter" style="width: 100%;float: left;margin-left: 50px;">
+                                            <i class="icon-hand-down icon-animated-hand-pointer blue"></i>
+                                            <a href="#modal-wizard" data-toggle="modal" class="pink">商品详情：宽度750px 即可 </a>
+                                        </h4>
+                                        <div style="width: 750px;margin-left: 50px;float: left">
+                                            <div style="display:inline">
+                                                <img id="shopGoodPic0" alt="商品一详情图" style="width: 750px;"
+                                                     src="http://ou3ytow6g.bkt.clouddn.com/shop/good/%E8%AF%A6%E6%83%85%E9%A1%B5%20-%20%E5%89%AF%E6%9C%AC%20%281%29.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadBannerForm1' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-top:2px;width: 374px;'>
+                                                    </input>
+                                                    <button class='btn btn-info' onclick='upLoad(1)'
+                                                            style='float:right;margin-bottom: 50px;margin-top:2px;width: 374px;height: 45px;'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div id="faq-tab-3" class="tab-pane fade">
+                                    <div style="width: 800px;display:inline;float:left">
+                                        <h4 class="lighter" style="width: 100%;float: left;margin-left: 50px;">
+                                            <i class="icon-hand-down icon-animated-hand-pointer blue"></i>
+                                            <a href="#modal-wizard" data-toggle="modal" class="pink">商品详情：宽度750px 即可 </a>
+                                        </h4>
+                                        <div style="width: 750px;margin-left: 50px;float: left">
+                                            <div style="display:inline">
+                                                <img id="shopGoodPic2" alt="商品一详情图" style="width: 750px;"
+                                                     src="http://ou3ytow6g.bkt.clouddn.com/shop/good/good2detail.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadBannerForm2' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-top:2px;width: 374px;'>
+                                                    </input>
+                                                    <button class='btn btn-info' onclick='upLoad(1)'
+                                                            style='float:right;margin-bottom: 50px;margin-top:2px;width: 374px;height: 45px;'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="faq-tab-4" class="tab-pane fade">
+                                    <div style="width: 800px;display:inline;float:left">
+                                        <h4 class="lighter" style="width: 100%;float: left;margin-left: 50px;">
+                                            <i class="icon-hand-down icon-animated-hand-pointer blue"></i>
+                                            <a href="#modal-wizard" data-toggle="modal" class="pink">商品详情：宽度750px 即可 </a>
+                                        </h4>
+                                        <div style="width: 750px;margin-left: 50px;float: left">
+                                            <div style="display:inline">
+                                                <img id="shopGoodPic3" alt="商品一详情图" style="width: 750px;"
+                                                     src="http://ou3ytow6g.bkt.clouddn.com/shop/good/good3detail.jpg"/>
+                                                <form  enctype='multipart/form-data'>
+                                                    <input id='uploadBannerForm3' class='btn btn-info' type="file" name='pic'
+                                                           style='float:left;margin-top:2px;width: 374px;'>
+                                                    </input>
+                                                    <button class='btn btn-info' onclick='upLoad(1)'
+                                                            style='float:right;margin-bottom: 50px;margin-top:2px;width: 374px;height: 45px;'>
+                                                        <i class='icon-pencil'>修改</i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            </div>
+
+
+
+
+
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+</div><!-- /.main-container-inner -->
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+<!--[if !IE]> -->
+<script src="../js/jquery.min.js"></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+<!--[if !IE]> -->
+
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+<script type="text/javascript">
+    if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+</script>
+
+
+
+
+
+
+
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/typeahead-bs2.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('.accordion').on('hide', function (e) {
+            $(e.target).prev().children(0).addClass('collapsed');
+        })
+        $('.accordion').on('show', function (e) {
+            $(e.target).prev().children(0).removeClass('collapsed');
+        })
+    });
+</script>
+<div style="display:none">
+    <script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script>
+</div>
+</body>
+</html>

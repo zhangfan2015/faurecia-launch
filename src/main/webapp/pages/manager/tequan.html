@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>爱丁美肤中心后台管理</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- basic styles -->
+
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="assets/css/dropzone.css" />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+	<![endif]-->
+
+	<!-- page specific plugin styles -->
+
+	<link rel="stylesheet" href="assets/css/jquery-ui-1.10.3.custom.min.css" />
+
+	<!-- fonts -->
+
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+	<!-- ace styles -->
+
+	<link rel="stylesheet" href="assets/css/ace.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+
+	<!--[if lte IE 8]>
+	<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+	<![endif]-->
+
+	<!-- inline styles related to this page -->
+
+	<!-- ace settings handler -->
+
+	<script src="assets/js/ace-extra.min.js"></script>
+	<script src="assets/js/dropzone.min.js"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+	<!--[if lt IE 9]>
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+<div class="navbar navbar-default" id="navbar">
+	<script type="text/javascript">
+        try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+	</script>
+
+	<div class="navbar-container" id="navbar-container">
+		<div class="navbar-header pull-left">
+			<a href="#" class="navbar-brand">
+				<small>
+					<i class="icon-leaf"></i>
+					爱丁美肤中心
+				</small>
+			</a><!-- /.brand -->
+		</div><!-- /.navbar-header -->
+
+		<div class="navbar-header pull-right" role="navigation">
+			<ul class="nav ace-nav">
+				<li class="light-blue">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+						<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
+						<span class="user-info">
+									<small>Welcome,</small>
+									Jason
+								</span>
+
+						<i class="icon-caret-down"></i>
+					</a>
+
+					<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+						<li>
+							<a href="#">
+								<i class="icon-cog"></i>
+								修改密码
+							</a>
+						</li>
+						<li class="divider"></li>
+
+						<li>
+							<a href="#">
+								<i class="icon-off"></i>
+								登出
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul><!-- /.ace-nav -->
+		</div><!-- /.navbar-header -->
+	</div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+	<script type="text/javascript">
+        try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+	</script>
+
+	<div class="main-container-inner">
+		<a class="menu-toggler" id="menu-toggler" href="#">
+			<span class="menu-text"></span>
+		</a>
+
+		<div class="sidebar" id="sidebar">
+			<script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+			</script>
+
+
+
+			<ul class="nav nav-list">
+
+
+
+
+
+				<li>
+					<a href="shopIndex.html">
+						<i class="icon-dashboard"></i>
+						<span class="menu-text"> 布局设置 </span>
+					</a>
+				</li>
+				<li>
+					<a href="good.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 商品管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="apply.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 申请记录 </span>
+					</a>
+				</li>
+				<li>
+					<a href="appointment.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 预约记录 </span>
+					</a>
+				</li>
+				<li>
+					<a href="userManagment.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 用户管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="coupons.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 卡券管理 </span>
+					</a>
+				</li>
+				<li class="active">
+					<a href="tequan.html">
+						<i class="icon-text-width"></i>
+						<span class="menu-text"> 特权管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="orderManagment.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 订单管理 </span>
+					</a>
+				</li>
+				'
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</ul><!-- /.nav-list -->
+
+			<div class="sidebar-collapse" id="sidebar-collapse">
+				<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+			</div>
+
+			<script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+			</script>
+		</div>
+
+		<div class="main-content">
+			<div class="breadcrumbs" id="breadcrumbs">
+				<script type="text/javascript">
+                    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+				</script>
+
+				<ul class="breadcrumb">
+					<li>
+						<i class="icon-home home-icon"></i>
+						<a href="#">卡券管理</a>
+					</li>
+
+
+
+				</ul><!-- .breadcrumb -->
+			</div>
+
+			<div class="page-content">
+				<div class="page-header">
+					<h1>
+						特权管理
+						<small>
+							<i class="icon-double-angle-right"></i>
+							特权详细信息
+						</small>
+						<button class="btn btn-xs btn-success">
+							新建特权
+						</button>
+					</h1>
+
+				</div><!-- /.page-header -->
+
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+
+						<div class="tabbable">
+							<ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+								<li class="active">
+									<a data-toggle="tab" href="#faq-tab-1">
+										特权基本信息
+									</a>
+								</li>
+
+
+
+							</ul>
+
+							<div class="tab-content no-border padding-24">
+								<div id="faq-tab-1" class="tab-pane fade in active">
+
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="table-responsive">
+												<table id="sample-table-1" class="table table-striped table-bordered table-hover">
+													<thead>
+													<tr>
+														<th>特权名称</th>
+														<th>特权描述</th>
+														<th>积分条件</th>
+														<th></th>
+													</tr>
+													</thead>
+
+													<tbody>
+
+
+
+
+													<tr class="">
+
+
+														<td>
+															身体护理
+														</td>
+														<td>
+															享有身体护理体验券*5，到店免费享用~
+														</td>
+														<td>积分总额大于10000分</td>
+
+														<td>
+															<div >
+																<button class="btn btn-xs btn-danger">
+																	删除
+																</button>
+
+																<button class="btn btn-xs btn-info" >
+																	修改
+																</button>
+															</div>
+
+
+														</td>
+													</tr>
+
+
+													</tbody>
+												</table>
+											</div><!-- /.table-responsive -->
+										</div><!-- /span -->
+									</div>
+
+								</div>
+								<div id="faq-tab-2" class="tab-pane fade">
+
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="table-responsive">
+												<table id="sample-table-2" class="table table-striped table-bordered table-hover">
+													<thead>
+													<tr>
+														<th class="center">
+															<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+														</th>
+														<th>Domain</th>
+														<th>Price</th>
+														<th class="hidden-480">Clicks</th>
+
+														<th>
+															<i class="icon-time bigger-110 hidden-480"></i>
+															Update
+														</th>
+														<th class="hidden-480">Status</th>
+
+														<th></th>
+													</tr>
+													</thead>
+
+													<tbody>
+													<tr class="">
+														<td class="center">
+															<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+														</td>
+
+														<td>
+															<a href="#">ace.com</a>
+														</td>
+														<td>$45</td>
+														<td class="hidden-480">3,330</td>
+														<td>Feb 12</td>
+
+														<td class="hidden-480">
+															<span class="label label-sm label-warning">Expiring</span>
+														</td>
+
+														<td>
+															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+																<button class="btn btn-xs btn-success">
+																	<i class="icon-ok bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-info">
+																	<i class="icon-edit bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-danger">
+																	<i class="icon-trash bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-warning">
+																	<i class="icon-flag bigger-120"></i>
+																</button>
+															</div>
+
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-cog icon-only bigger-110"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close pull-right">
+																		<li>
+																			<a href="#" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																				<span class="blue">
+																					<i class="icon-zoom-in bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
+																				<span class="green">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
+																				<span class="red">
+																					<i class="icon-trash bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+
+													<tr class="">
+														<td class="center">
+															<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+														</td>
+
+														<td>
+															<a href="#">base.com</a>
+														</td>
+														<td>$35</td>
+														<td class="hidden-480">2,595</td>
+														<td>Feb 18</td>
+
+														<td class="hidden-480">
+															<span class="label label-sm label-success">Registered</span>
+														</td>
+
+														<td>
+															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+																<button class="btn btn-xs btn-success">
+																	<i class="icon-ok bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-info">
+																	<i class="icon-edit bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-danger">
+																	<i class="icon-trash bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-warning">
+																	<i class="icon-flag bigger-120"></i>
+																</button>
+															</div>
+
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-cog icon-only bigger-110"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close pull-right">
+																		<li>
+																			<a href="#" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																				<span class="blue">
+																					<i class="icon-zoom-in bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
+																				<span class="green">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
+																				<span class="red">
+																					<i class="icon-trash bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+
+													<tr class="">
+														<td class="center">
+															<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+														</td>
+
+														<td>
+															<a href="#">max.com</a>
+														</td>
+														<td>$60</td>
+														<td class="hidden-480">4,400</td>
+														<td>Mar 11</td>
+
+														<td class="hidden-480">
+															<span class="label label-sm label-warning">Expiring</span>
+														</td>
+
+														<td>
+															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+																<button class="btn btn-xs btn-success">
+																	<i class="icon-ok bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-info">
+																	<i class="icon-edit bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-danger">
+																	<i class="icon-trash bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-warning">
+																	<i class="icon-flag bigger-120"></i>
+																</button>
+															</div>
+
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-cog icon-only bigger-110"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close pull-right">
+																		<li>
+																			<a href="#" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																				<span class="blue">
+																					<i class="icon-zoom-in bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
+																				<span class="green">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
+																				<span class="red">
+																					<i class="icon-trash bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+
+													<tr class="">
+														<td class="center">
+															<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+														</td>
+
+														<td>
+															<a href="#">best.com</a>
+														</td>
+														<td>$75</td>
+														<td class="hidden-480">6,500</td>
+														<td>Apr 03</td>
+
+														<td class="hidden-480">
+															<span class="label label-sm label-inverse arrowed-in">Flagged</span>
+														</td>
+
+														<td>
+															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+																<button class="btn btn-xs btn-success">
+																	<i class="icon-ok bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-info">
+																	<i class="icon-edit bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-danger">
+																	<i class="icon-trash bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-warning">
+																	<i class="icon-flag bigger-120"></i>
+																</button>
+															</div>
+
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-cog icon-only bigger-110"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close pull-right">
+																		<li>
+																			<a href="#" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																				<span class="blue">
+																					<i class="icon-zoom-in bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
+																				<span class="green">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
+																				<span class="red">
+																					<i class="icon-trash bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+
+													<tr class="">
+														<td class="center">
+															<label>
+																<input type="checkbox" class="ace">
+																<span class="lbl"></span>
+															</label>
+														</td>
+
+														<td>
+															<a href="#">pro.com</a>
+														</td>
+														<td>$55</td>
+														<td class="hidden-480">4,250</td>
+														<td>Jan 21</td>
+
+														<td class="hidden-480">
+															<span class="label label-sm label-success">Registered</span>
+														</td>
+
+														<td>
+															<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+																<button class="btn btn-xs btn-success">
+																	<i class="icon-ok bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-info">
+																	<i class="icon-edit bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-danger">
+																	<i class="icon-trash bigger-120"></i>
+																</button>
+
+																<button class="btn btn-xs btn-warning">
+																	<i class="icon-flag bigger-120"></i>
+																</button>
+															</div>
+
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-cog icon-only bigger-110"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-caret dropdown-close pull-right">
+																		<li>
+																			<a href="#" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
+																				<span class="blue">
+																					<i class="icon-zoom-in bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
+																				<span class="green">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+
+																		<li>
+																			<a href="#" class="tooltip-error" data-rel="tooltip" title="" data-original-title="Delete">
+																				<span class="red">
+																					<i class="icon-trash bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</div><!-- /.table-responsive -->
+										</div><!-- /span -->
+									</div>
+								</div>
+
+
+
+
+
+
+							</div>
+						</div>
+						<!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.page-content -->
+		</div><!-- /.main-content -->
+	</div><!-- /.main-container-inner -->
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+<!--[if !IE]> -->
+
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+<script type="text/javascript">
+    if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+</script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/typeahead-bs2.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+
+<script type="text/javascript">
+    jQuery(function($) {
+        $('.accordion').on('hide', function (e) {
+            $(e.target).prev().children(0).addClass('collapsed');
+        })
+        $('.accordion').on('show', function (e) {
+            $(e.target).prev().children(0).removeClass('collapsed');
+        })
+    });
+</script>
+<div style="display:none"><script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script></div>
+</body>
+</html>

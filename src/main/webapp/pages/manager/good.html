@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>商品信息</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- basic styles -->
+
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="assets/css/dropzone.css" />
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+	<![endif]-->
+
+	<!-- page specific plugin styles -->
+
+	<link rel="stylesheet" href="assets/css/jquery-ui-1.10.3.custom.min.css" />
+
+	<!-- fonts -->
+
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+	<!-- ace styles -->
+
+	<link rel="stylesheet" href="assets/css/ace.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+
+	<!--[if lte IE 8]>
+	<link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+	<![endif]-->
+
+	<!-- inline styles related to this page -->
+
+	<!-- ace settings handler -->
+
+	<script src="assets/js/ace-extra.min.js"></script>
+	<script src="assets/js/dropzone.min.js"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+	<!--[if lt IE 9]>
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="../js/jquery-1.4.2.min.js"></script>
+</head>
+
+<body>
+<div class="navbar navbar-default" id="navbar">
+	<script type="text/javascript">
+        try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+        $(document).ready(function() {
+            getGoodInfoById(1);
+        });
+		function getGoodInfoById(goodId){
+            $.post("../manager/getGoodInfoById",{goodId:goodId},function(result){
+                $("#form-field-"+goodId+"1").val(result.bizObject.name);
+                $("#form-field-"+goodId+"2").val(result.bizObject.orderCount);
+                $("#form-field-"+goodId+"3").val(result.bizObject.price/100);
+            })
+		}
+		function updateGoodInfo(goodId) {
+            $.post("../manager/updateGoodInfoById",{goodId:goodId,name:$("#form-field-"+goodId+"1").val(),orderCount:$("#form-field-"+goodId+"2").val(),price:$("#form-field-"+goodId+"3").val()*100},function(result){
+                $("#form-field-"+goodId+"1").val(result.bizObject.name);
+                $("#form-field-"+goodId+"2").val(result.bizObject.orderCount);
+                $("#form-field-"+goodId+"3").val(result.bizObject.price/100);
+            })
+        }
+	</script>
+
+	<div class="navbar-container" id="navbar-container">
+		<div class="navbar-header pull-left">
+			<a href="#" class="navbar-brand">
+				<small>
+					<i class="icon-leaf"></i>
+					爱丁美肤中心
+				</small>
+			</a><!-- /.brand -->
+		</div><!-- /.navbar-header -->
+
+		<div class="navbar-header pull-right" role="navigation">
+			<ul class="nav ace-nav">
+				<li class="light-blue">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+						<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
+						<span class="user-info">
+									<small>Welcome,</small>
+									Jason
+								</span>
+
+						<i class="icon-caret-down"></i>
+					</a>
+
+					<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+						<li>
+							<a href="#">
+								<i class="icon-cog"></i>
+								修改密码
+							</a>
+						</li>
+						<li class="divider"></li>
+
+						<li>
+							<a href="#">
+								<i class="icon-off"></i>
+								登出
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul><!-- /.ace-nav -->
+		</div><!-- /.navbar-header -->
+	</div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+	<script type="text/javascript">
+        try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+	</script>
+
+	<div class="main-container-inner">
+		<a class="menu-toggler" id="menu-toggler" href="#">
+			<span class="menu-text"></span>
+		</a>
+
+		<div class="sidebar" id="sidebar">
+			<script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+			</script>
+
+
+
+			<ul class="nav nav-list">
+
+
+
+
+
+				<li>
+					<a href="shopIndex.html">
+						<i class="icon-dashboard"></i>
+						<span class="menu-text"> 布局设置 </span>
+					</a>
+				</li>
+				<li class="active">
+					<a href="good.html">
+						<i class="icon-text-width"></i>
+						<span class="menu-text"> 商品管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="apply.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 申请记录 </span>
+					</a>
+				</li>
+				<li>
+					<a href="appointment.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 预约记录 </span>
+					</a>
+				</li>
+				<li>
+					<a href="userManagment.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 用户管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="coupons.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 卡券管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="tequan.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 特权管理 </span>
+					</a>
+				</li>
+				<li>
+					<a href="orderManagment.html" class="dropdown-toggle">
+						<i class="icon-list"></i>
+						<span class="menu-text"> 订单管理 </span>
+					</a>
+				</li>
+				'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</ul><!-- /.nav-list -->
+
+			<div class="sidebar-collapse" id="sidebar-collapse">
+				<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+			</div>
+
+			<script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+			</script>
+		</div>
+
+		<div class="main-content">
+			<div class="breadcrumbs" id="breadcrumbs">
+				<script type="text/javascript">
+                    try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+				</script>
+
+				<ul class="breadcrumb">
+					<li>
+						<i class="icon-home home-icon"></i>
+						<a href="#">商品管理</a>
+					</li>
+
+
+
+				</ul><!-- .breadcrumb -->
+			</div>
+
+			<div class="page-content">
+				<div class="page-header">
+					<h1>
+						活动商品
+						<small>
+							<i class="icon-double-angle-right"></i>
+							商品属性设置
+						</small>
+					</h1>
+				</div><!-- /.page-header -->
+
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+
+						<div class="tabbable">
+							<ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+								<li class="active">
+									<a data-toggle="tab" href="#faq-tab-1" onclick="getGoodInfoById(1)">
+										商品1
+									</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#faq-tab-2" onclick="getGoodInfoById(2)">
+										商品2
+									</a>
+								</li>
+								<li>
+									<a data-toggle="tab" href="#faq-tab-3"onclick="getGoodInfoById(3)">
+										商品3
+									</a>
+								</li>
+
+
+							</ul>
+
+							<div class="tab-content no-border padding-24">
+								<div id="faq-tab-1" class="tab-pane fade in active">
+									<div class="form-group" style="width: 300px;">
+										<div class="col-sm-9">
+											商品名称：<input type="text"   id="form-field-11"  style="margin-bottom: 50px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<div class="col-sm-9">
+											购买人数：<input type="number" id="form-field-12" style="margin-bottom: 50px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<div class="col-sm-9">
+											价格（单位：元）<input type="number" id="form-field-13" style="margin-bottom: 50px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+
+										<button class="btn btn-xs btn-success" onclick="updateGoodInfo(1)">
+											修改商品信息
+										</button>
+
+									</div>
+								</div>
+								<div id="faq-tab-2" class="tab-pane fade">
+									<div class="form-group" style="width: 300px;">
+										<div class="col-sm-9">
+											商品名称：<input type="text"   id="form-field-21"  style="margin-bottom: 50px;height:30px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<div class="col-sm-9">
+											购买人数：<input type="number" id="form-field-22" style="margin-bottom: 50px;height:30px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<div class="col-sm-9">
+											价格（单位：元）<input type="number" id="form-field-23" style="margin-bottom: 50px;height:30px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<button class="btn btn-xs btn-success" onclick="updateGoodInfo(2)">
+											修改商品信息
+										</button>
+
+									</div>
+								</div>
+								<div id="faq-tab-3" class="tab-pane fade">
+									<div class="form-group" style="width: 300px;">
+										<div class="col-sm-9">
+											商品名称：<input type="text"   id="form-field-31"  style="margin-bottom: 50px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<div class="col-sm-9">
+											购买人数：<input type="number" id="form-field-32" style="margin-bottom: 50px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<div class="col-sm-9">
+											价格（单位：元）<input type="number" id="form-field-33" style="margin-bottom: 50px;width: 300px" class="col-xs-10 col-sm-5">
+										</div>
+										<button class="btn btn-xs btn-success" onclick="updateGoodInfo(3)">
+											修改商品信息
+										</button>
+
+									</div>
+								</div>
+
+
+
+
+
+							</div>
+						</div>
+						<!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.page-content -->
+		</div><!-- /.main-content -->
+	</div><!-- /.main-container-inner -->
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+
+<script src="../js/jquery.min.js"></script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+<!--[if !IE]> -->
+
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+<script type="text/javascript">
+    if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+</script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/typeahead-bs2.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+
+<!-- inline scripts related to this page -->
+
+<script type="text/javascript">
+    jQuery(function($) {
+        $('.accordion').on('hide', function (e) {
+            $(e.target).prev().children(0).addClass('collapsed');
+        })
+        $('.accordion').on('show', function (e) {
+            $(e.target).prev().children(0).removeClass('collapsed');
+        })
+    });
+</script>
+<!--<div style="display:none"><script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script></div>-->
+</body>
+</html>

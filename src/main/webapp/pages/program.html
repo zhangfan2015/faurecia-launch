@@ -1,0 +1,267 @@
+<html>
+<head>
+    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/jquery-2.0.3.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="/faurecia-launch/pages/css/basic.css">
+    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
+    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/bootstrap.min.js'></script>
+    <script src="/faurecia-launch/pages/manager/assets/js/bootbox.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var height = document.body.clientHeight;
+    var emwidth=document.body.clientWidth/4;
+    var emheight=document.body.clientHeight*0.7/3*0.98;
+    document.documentElement.style.fontSize = document.documentElement.clientWidth / 3840 + 'px';
+    $(document).ready(function(){
+//        $("embed").css("width","700");
+        $("#title").height(height/10);
+        createLaunchList();
+        var s = setInterval("createLaunchList()",1000*60*15);
+        $("#logo1").click(function () {
+            if(document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen){
+                exitFullScreen();
+            }else{
+                fullScreen();
+            }
+
+        })
+
+    });
+
+    var websocket = null;
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        //http://localhost:8080/AD/wx/createMenu
+//        websocket = new WebSocket("ws://192.168.67.145:8080/faurecia-launch/websocket");
+        websocket = new WebSocket("ws://10.166.220.165:8080/faurecia-launch/websocket");
+    }
+    else {
+//            alert('当前浏览器 Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        setMessageInnerHTML("WebSocket连接发生错误");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+        setMessageInnerHTML("WebSocket连接成功");
+
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+//        setMessageInnerHTML(event.data);
+        if(event.data=="update"){
+            createLaunchList();
+        }
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        setMessageInnerHTML("WebSocket连接关闭");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        closeWebSocket();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+//            alert(innerHTML);
+    }
+
+    //关闭WebSocket连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send(word) {
+//            var message = document.getElementById('text').value;
+        websocket.send(word);
+    }
+
+    function createLaunchList() {
+        $.post("../launch/getProgramList",function(result){
+            $("#pdfList").empty();
+            for(var x in result.bizObject){
+                var launch = result.bizObject[x];
+
+
+            }
+            $("#logo1").show();
+            $(".program-item").width(emwidth);
+            $(".program-item").height(emheight);
+
+        })
+    }
+    function jump() {
+        window.location.href="index.html"
+    }
+
+    function loadImage(objImg) {
+        AutoResizeImage(0,height/12,objImg);
+
+    }
+
+
+    function fullScreen() {
+        var elem = document.body;
+        if (elem.webkitRequestFullScreen) {
+            elem.webkitRequestFullScreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.requestFullScreen) {
+            elem.requestFullscreen();
+        } else {
+            notice.notice_show("浏览器不支持全屏API或已被禁用", null, null, null, true, true);
+        }
+    }
+    function exitFullScreen() {
+        var elem = document;
+        if (elem.webkitCancelFullScreen) {
+            elem.webkitCancelFullScreen();
+        } else if (elem.mozCancelFullScreen) {
+            elem.mozCancelFullScreen();
+        } else if (elem.cancelFullScreen) {
+            elem.cancelFullScreen();
+        } else if (elem.exitFullscreen) {
+            elem.exitFullscreen();
+        } else {
+            notice.notice_show("浏览器不支持全屏API或已被禁用", null, null, null, true, true);
+        }
+    }
+
+
+        function AutoResizeImage(maxWidth,maxHeight,objImg){
+        var img = new Image();
+        img.src = objImg.src;
+        var hRatio;
+        var wRatio;
+        var Ratio = 1;
+        var w = img.width;
+        var h = img.height;
+        wRatio = maxWidth / w;
+        hRatio = maxHeight / h;
+        if (maxWidth ==0 && maxHeight==0){
+            Ratio = 1;
+        }else if (maxWidth==0){//
+            if (hRatio<1) Ratio = hRatio;
+        }else if (maxHeight==0){
+            if (wRatio<1) Ratio = wRatio;
+        }else if (wRatio<1 || hRatio<1){
+            Ratio = (wRatio<=hRatio?wRatio:hRatio);
+        }
+        if (Ratio<1){
+            w = w * Ratio;
+            h = h * Ratio;
+        }
+        objImg.height = h;
+        objImg.width = w;
+    }
+    function showpic() {
+        var form = $("<img style='width: 99%;height: 800px' src='http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg'  />");
+        var div = bootbox.dialog({
+            title:"图片详情",
+            message: form,
+            animate: true,
+            buttons: {
+                "close": {
+                    "label": "<i class='icon-remove'></i> 关闭",
+                    "className": "btn-sm"
+                }
+            }
+
+        });
+    }
+</script>
+<img src="image/bkground.jpg" style="position:fixed;
+top: 0;
+left: 0;
+width:100%;
+height:100%;
+z-index:-10;
+zoom: 1;"/>
+<img id="logo1"  src="image/log5.png" style="position: fixed;margin-left: 40px;margin-top: 55px" onload="loadImage(this)">
+<div id="title" style="display: flex;margin: 60px auto 50px; flex-direction: row">
+    <div style="text-align: center;width: 100%;display: flex;flex-direction: column">
+        <div style="color: gainsboro;font-size: 100rem">FCM CC PROGRAM LAUNCH BOARD</div>
+        <div style="color: #687dae;font-size: 30rem";>Fauriecia Exhaust Systems ChangChun Co.,Ltd.</div>
+    </div>
+</div>
+<div id="programList">
+
+
+    <div class="program-item">
+        <div class="program-name">项目名称项目名称项目名称项目名称</div>
+        <div class="pic-list">
+            <div class="scoll-son">
+                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+            </div>
+
+        </div>
+
+    </div>
+    <div class="program-item">
+        <div class="program-name">项目名称项目名称项目名称项目名称</div>
+        <div class="pic-list">
+            <div class="scoll-son">
+                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+            </div>
+
+        </div>
+
+    </div>
+    <div class="program-item">
+        <div class="program-name">项目名称项目名称项目名称项目名称</div>
+        <div class="pic-list">
+            <div class="scoll-son">
+                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+            </div>
+
+        </div>
+
+    </div>
+    <div class="program-item">
+        <div class="program-name">项目名称项目名称项目名称项目名称</div>
+        <div class="pic-list">
+            <div class="scoll-son">
+                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+            </div>
+
+        </div>
+
+    </div>
+    <div class="program-item">
+        <div class="program-name">项目名称项目名称项目名称项目名称</div>
+        <div class="pic-list">
+            <div class="scoll-son">
+                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+</body>
+</html>

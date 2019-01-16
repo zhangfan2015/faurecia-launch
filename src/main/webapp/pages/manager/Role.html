@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>角色管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
+    <script src="/faurecia-launch/pages/manager/assets/js/base.js"></script>
+
+    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/datepicker.css">
+    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/ui.jqgrid.css">
+    <script src="/faurecia-launch/pages/manager/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+    <script src="/faurecia-launch/pages/manager/assets/js/jqGrid/i18n/grid.locale-cn.js"></script>
+    <script src="/faurecia-launch/pages/manager/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+    <script type="text/javascript" src="/faurecia-launch/pages/manager/assets/js/ajaxfileupload.js"></script>
+
+    <style type="text/css">
+        .fileinput-button {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .fileinput-button input{
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+                <table id="grid-table"></table>
+                <div id="grid-pager" style="height: 55px"></div>
+    <script type="text/javascript">
+        var grid_selector = "#grid-table";
+        var pager_selector = "#grid-pager";
+        var scope;
+        function canIuse(n) {
+            if($.inArray(n,window.parent.scope)>=0){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+        $(document).ready(function () {
+            scope=window.parent.scope;
+                jQuery(grid_selector).jqGrid({
+                    url:"../../admin/getRoleList",
+                    mtype:"POST",
+                    datatype: "json",
+                    height: 450,
+                    colNames: ['','角色名称', '描述','',' 操作'],
+                    colModel: [
+                        {name: 'id', index: 'id',hidden:true},
+                        {name: 'name', index: 'name', width: 60, editable: true,editrules:{ required:true,maxlength:"30"}},
+                        {name: 'dis', index: 'dis', width: 60, editable: true,editrules:{ required:true,maxlength:"50"}},
+                        {name: 'scope', index: 'scope',hidden:true},
+                        {
+                            name: 'myac', index: '', width: 120, fixed: true, sortable: false, resize: false,
+                            formatter: 'actions',
+                            formatoptions: {
+                                keys: true,
+                                editbutton:canIuse('18'),
+                                delbutton:canIuse('19'),
+                                delOptions: {recreateForm: true, beforeShowForm: beforeDeleteCallback},
+                                //editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
+                            }
+                        }
+                    ],
+                    sortable:true,
+                    sortorder:'desc',
+                    viewrecords: true,
+                    rowNum: 10,
+                    rowList: [10, 20, 30],
+                    pager: pager_selector,
+                    altRows: true,
+                    //toppager: true,
+
+                    multiselect: true,
+                    //multikey: "ctrlKey",
+                    multiboxonly: true,
+
+                    loadComplete: function () {
+                        var table = this;
+                        setTimeout(function () {
+                            styleCheckbox(table);
+
+                            updateActionIcons(table);
+                            updatePagerIcons(table);
+                            enableTooltips(table);
+                        }, 0);
+                        for(var x in table.rows){
+                            var row = table.rows[x];
+                            if(row.id&&canIuse('20')){
+                                $(row.lastChild).find('div').eq(0).append(
+                                    " <div title='' style='float:left;margin-left:5px;' class='ui-pg-div ui-inline-del' id='view_grid-table' onclick=showRole("+row.id+")  data-original-title='设置角色权限'><span class='ui-icon icon-group blue'></span></div>")
+                            }
+                        }
+                    },
+
+                    editurl: "../../admin/roleListOption",//nothing is saved
+//                caption: "jqGrid with inline editing",
+
+
+                    autowidth: true
+
+                });
+
+
+
+                jQuery(grid_selector).jqGrid('navGrid', pager_selector,
+                    { 	//navbar options
+                        edit: canIuse('18'),
+                        editicon: 'icon-pencil blue',
+                        add: canIuse('17'),
+                        addicon: 'icon-plus-sign purple',
+                        del: canIuse('19'),
+                        delicon: 'icon-trash red',
+                        search: false,
+                        searchicon: 'icon-search orange',
+                        refresh: true,
+                        refreshicon: 'icon-refresh green',
+                        view: false,
+                        viewicon: 'icon-zoom-in grey',
+                    },
+                    {
+                        //edit record form
+                        closeAfterEdit: true,
+                        recreateForm: true,
+                        beforeShowForm: function (e) {
+                            var form = $(e[0]);
+                            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                            style_edit_form(form);
+                        }
+
+                    },
+                    {
+                        //new record form
+                        closeAfterAdd: true,
+                        recreateForm: true,
+                        viewPagerButtons: false,
+                        beforeShowForm: function (e) {
+                            var form = $(e[0]);
+                            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                            style_edit_form(form);
+                        }
+                    },
+                    {
+                        //delete record form
+                        recreateForm: true,
+                        beforeShowForm: function (e) {
+                            var form = $(e[0]);
+                            if (form.data('styled')) return false;
+
+                            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                            style_delete_form(form);
+
+                            form.data('styled', true);
+                        },
+                        onClick: function (e) {
+                        }
+                    },
+                    {
+                        //search form
+                        recreateForm: true,
+                        afterShowSearch: function (e) {
+                            var form = $(e[0]);
+                            form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                            style_search_form(form);
+                        },
+                        afterRedraw: function () {
+                            style_search_filters($(this));
+                        }
+                        ,
+                        multipleSearch: true,
+                        /**
+                         multipleGroup:true,
+                         showQuery: true
+                         */
+                    },
+                    {
+                        //view record form
+                        recreateForm: true,
+                        beforeShowForm: function (e) {
+                            var form = $(e[0]);
+                            form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                        }
+                    }
+                )
+
+
+            })
+
+
+
+
+
+
+
+
+
+
+            function showRole(id) {
+
+                    $.post("../../admin/getRoleDetailByRoleId",{id:id},function (result) {
+                        var form= "<div style='width: 800px;overflow:auto;overflow-x:hidden;height: "+$(window).height()*0.6+"px'>" +
+                            "<div id='picList' style='width: 800px;'>"+
+                            "<div id='tree1' class='tree tree-selectable'> ";
+                        for(var x in result.bizObject){
+                           var drawer = result.bizObject[x];
+                            form+= "<div class='tree-folder'   style='display: block;'>	" ;
+                            if(drawer.isSelect){
+                                form+="<div class='tree-item tree-selected' onclick='tickItems(this)'  style='display: block;'>"+
+                                            "<i class='icon-ok' id='"+x+"' onclick=selectId(this)></i>";
+                            }else{
+                                form+="<div class='tree-item' onclick='tickItems(this)'  style='display: block;'>"+
+                                            "<i class='icon-remove' id='"+x+"' onclick=selectId(this)></i>";
+                            }
+                                    form+= "<div class='tree-item-name'>"+drawer.name+"</div>			" +
+                                      "</div>" +
+                                "<div class='tree-folder-content' style='display: none'>";
+                            for(var y in drawer.folders){
+                                var folder = drawer.folders[y];
+                                if(folder.isSelect){
+                                    form+= "<div class='tree-item tree-selected' onclick='tickItems(this)' style='display: block;'>" +
+                                                "<i class='icon-ok' onclick=selectId(this) id='"+folder.id+"'></i>";
+                                }else{
+                                    form+= "<div class='tree-item' onclick='tickItems(this)' style='display: block;'>"+
+                                                "<i class='icon-remove' onclick=selectId(this) id='"+folder.id+"'></i>";
+                                }
+                                    form+= "<div class='tree-item-name'>"+folder.name+"</div>			" +
+                                            "</div>"+
+                                "<div class='tree-folder-content' style='display: none'>";
+                                for(var z in folder.items){
+                                    var item = folder.items[z];
+                                    if(item.isSelect){
+                                        form+= "<div class='tree-item tree-selected'  style='display: block;'>" +
+                                                    "<i class='icon-ok' onclick=selectId(this) id='"+item.id+"'></i>";
+                                    }else{
+                                        form+= "<div class='tree-item'  style='display: block;'>"+
+                                                    "<i class='icon-remove' onclick=selectId(this) id='"+item.id+"'></i>";
+                                    }
+                                            form+= "<div class='tree-item-name'>"+item.name+"</div>			" +
+                                                "</div>";
+                                }
+                                form+="</div>" ;
+                            }
+                            form+="</div>" ;
+                        }
+
+                        form+= "</div></div></div>";
+                        var div = bootbox.dialog({
+                            title:"权限列表",
+                            message: form,
+                            closeOnEscape:true,
+                            buttons: {
+                                "change": {
+                                    "label": "<i class='icon-trash'></i> 修改",
+                                    "className": "btn-sm btn-success",
+                                    "callback": function () {
+                                        var ids="";
+                                        $(".icon-ok").each(function() {
+                                            if($(this).attr("id")){
+                                                ids+=$(this).attr("id")+","
+                                            }
+                                        });
+                                        $.post("../../admin/saveRoleScope",{id:id,scope:ids.substr(0, ids.length - 1)},function (result) {
+                                            if(result.status==1){
+                                                bootbox.alert("操作成功！")
+                                            }else{
+                                                bootbox.alert("系统异常请刷新当前页面，或稍后再试！");
+                                            }
+                                        })
+                                    }
+                                },
+                                "close": {
+                                    "label": "<i class='icon-remove'></i> 关闭",
+                                    "className": "btn-sm"
+                                }
+                            }
+
+                        });
+                    })
+
+
+
+            }
+
+            function tickItems(o) {
+                $(o).next().toggle();
+
+            }
+            function selectId(o) {
+                if( $(o).parent().attr("class")=="tree-item tree-selected"){
+                    $(o).attr("class","icon-remove").parent().attr("class","tree-item")
+                    if($(o).parent().next().attr("class")!="tree-item tree-selected"){
+                        $(o).parent().next().find('i').attr("class","icon-remove");
+                    }
+                    $(o).parent().next().find(".tree-item").attr("class","tree-item");
+
+                }else{
+                    $(o).attr("class","icon-ok").parent().attr("class","tree-item tree-selected");//自身点亮
+                    if($(o).parent().parent().attr("class")!="tree-folder"){
+                        $(o).parent().parent().prev().attr("class","tree-item tree-selected")
+                        $(o).parent().parent().prev().find('i').eq(0).attr("class","icon-ok");//父级点亮
+                    }
+                    if($(o).parent().next().attr("class")!="tree-folder-content"){//只有最低级的item 执行此代码
+                        $(o).parent().parent().parent().prev().attr("class","tree-item tree-selected");
+                        $(o).parent().parent().parent().prev().find('i').eq(0).attr("class","icon-ok");//父父级点亮
+                    }
+                }
+                $(o).parent().next().show();
+                event.stopPropagation();
+            }
+
+
+
+
+
+
+            function style_edit_form(form) {
+                form.find('input[name=isDisplay]').click(function () {
+                    if(form.find('input[name=isDisplay]').attr("checked")){
+                        form.find('input[name=isDisplay]').val("1").attr("checked",false);
+                    }else{
+                        form.find('input[name=isDisplay]').val("0").attr("checked",true);
+                    }
+                })
+                    .addClass('ace ace-switch ace-switch-5').after('<span class="lbl"></span>');
+                //update buttons classes
+
+
+                var buttons = form.next().find('.EditButton .fm-button');
+                buttons.addClass('btn btn-sm').find('[class*="-icon"]').remove();//ui-icon, s-icon
+                buttons.eq(0).addClass('btn-primary').prepend('<i class="icon-ok"></i>');
+                buttons.eq(0).attr("onclick","");
+                buttons.eq(1).prepend('<i class="icon-remove"></i>')
+
+                buttons = form.next().find('.navButton a').hide();
+                buttons.find('.ui-icon').remove();
+                buttons.eq(0).append('<i class="icon-chevron-left"></i>');
+                buttons.eq(1).append('<i class="icon-chevron-right"></i>');
+            }
+
+            function style_delete_form(form) {
+                var buttons = form.next().find('.EditButton .fm-button');
+                buttons.addClass('btn btn-sm').find('[class*="-icon"]').remove();//ui-icon, s-icon
+                buttons.eq(0).addClass('btn-danger').prepend('<i class="icon-trash"></i>');
+                buttons.eq(1).prepend('<i class="icon-remove"></i>')
+            }
+
+            function style_search_filters(form) {
+                form.find('.delete-rule').val('X');
+                form.find('.add-rule').addClass('btn btn-xs btn-primary');
+                form.find('.add-group').addClass('btn btn-xs btn-success');
+                form.find('.delete-group').addClass('btn btn-xs btn-danger');
+            }
+
+            function style_search_form(form) {
+                var dialog = form.closest('.ui-jqdialog');
+                var buttons = dialog.find('.EditTable')
+                buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'icon-retweet');
+                buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'icon-comment-alt');
+                buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'icon-search');
+            }
+
+            function beforeDeleteCallback(e) {
+                var form = $(e[0]);
+                if (form.data('styled')) return false;
+
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                style_delete_form(form);
+
+                form.data('styled', true);
+            }
+
+            function styleCheckbox(table) {
+
+                 $(table).find('input:checkbox').addClass('ace')
+                 .wrap('<label />')
+                 .after('<span class="lbl align-top" />')
+
+
+                 $('.ui-jqgrid-labels th[id*="_cb"]:first-child')
+                 .find('input.cbox[type=checkbox]').addClass('ace')
+                 .wrap('<label />').after('<span class="lbl align-top" />');
+
+            }
+
+
+            //unlike navButtons icons, action icons in rows seem to be hard-coded
+            //you can change them like this in here if you want
+            function updateActionIcons(table) {
+
+                 var replacement =
+                 {
+                     'ui-icon-pencil' : 'icon-pencil blue',
+                     'ui-icon-trash' : 'icon-trash red',
+                     'ui-icon-disk' : 'icon-ok green',
+                     'ui-icon-cancel' : 'icon-remove red'
+                 };
+                 $(table).find('.ui-pg-div span.ui-icon').each(function(){
+						var icon = $(this);
+						var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+						if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+					})
+
+            }
+
+            //replace icons with FontAwesome icons like above
+            function updatePagerIcons(table) {
+                var replacement =
+                    {
+                        'ui-icon-seek-first': 'icon-double-angle-left bigger-140',
+                        'ui-icon-seek-prev': 'icon-angle-left bigger-140',
+                        'ui-icon-seek-next': 'icon-angle-right bigger-140',
+                        'ui-icon-seek-end': 'icon-double-angle-right bigger-140'
+                    };
+                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                    var icon = $(this);
+                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+                })
+            }
+
+            function enableTooltips(table) {
+                $('.navtable .ui-pg-button').tooltip({container: 'body'});
+                $(table).find('.ui-pg-div').tooltip({container: 'body'});
+            }
+
+
+
+
+    </script>
+</div>
+
+</body>
+</html>

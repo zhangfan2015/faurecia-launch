@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>佛吉亚</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
+    <script src="/faurecia-launch/pages/manager/assets/js/base.js"></script>
+</head>
+
+<body>
+<div class="navbar navbar-default" id="navbar">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('navbar', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="navbar-container" id="navbar-container">
+        <div class="navbar-header pull-left">
+            <img id="faureciaLogo" class="nav-user-photo" src="/faurecia-launch/pages/image/china_faurecia.png" alt="Jason's Photo"/>
+        </div><!-- /.navbar-header -->
+
+        <div class="navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
+                <li class="light-blue">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="/faurecia-launch/pages/manager/assets/avatars/user.jpg" alt=""/>
+                        <span id="userName" class="user-info">
+								</span>
+
+                        <i class="icon-caret-down"></i>
+                    </a>
+
+                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a href="#" id="changepwdIcon">
+                                <i class="icon-cog"></i>
+                                修改密码
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li>
+                            <a id="logOut" href="#">
+                                <i class="icon-off"></i>
+                                登出系统
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul><!-- /.ace-nav -->
+        </div><!-- /.navbar-header -->
+    </div><!-- /.container -->
+</div>
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'fixed')
+                } catch (e) {
+                }
+            </script>
+
+            <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                    <button class="btn btn-success">
+                        <i class="icon-signal"></i>
+                    </button>
+
+                    <button class="btn btn-info">
+                        <i class="icon-pencil"></i>
+                    </button>
+
+                    <button class="btn btn-warning">
+                        <i class="icon-group"></i>
+                    </button>
+
+                    <button class="btn btn-danger">
+                        <i class="icon-cogs"></i>
+                    </button>
+                </div>
+
+                <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                    <span class="btn btn-success"></span>
+
+                    <span class="btn btn-info"></span>
+
+                    <span class="btn btn-warning"></span>
+
+                    <span class="btn btn-danger"></span>
+                </div>
+            </div><!-- #sidebar-shortcuts -->
+
+            <ul id="menuList" class="nav nav-list"></ul>
+
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+                   data-icon2="icon-double-angle-right"></i>
+            </div>
+
+            <script type="text/javascript">
+                try {
+                    ace.settings.check('sidebar', 'collapsed')
+                } catch (e) {
+                }
+            </script>
+        </div>
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try {
+                        ace.settings.check('breadcrumbs', 'fixed')
+                    } catch (e) {
+                    }
+                </script>
+                <!-- TODO.breadcrumb
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="icon-home home-icon"></i>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="active">Calendar</li>
+                    </ul>
+                -->
+
+            </div>
+            <div class="page-content">
+                <iframe id="content-src" src="/faurecia-launch/pages/manager/base-blank.html" style="width: 101%;border: none"></iframe>
+            </div>
+
+        </div><!-- /.main-content -->
+
+    </div><!-- /.main-container-inner -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div><!-- /.main-container -->
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    var AdminId;
+    var scope;
+    function timestart() {
+        var t = setTimeout($("#faureciaLogo").animate({height: "85px"}, 1500), 20500);
+    }
+
+    $(document).ready(function () {
+        var auther = false;
+        var windowHeight = document.body.clientHeight;
+        $("#content-src").height($(window).height()-150);
+        $("#faureciaLogo").height(windowHeight);
+        timestart();
+        setInterval("getsession()", 15000)
+        $.post("../../sys/getSession", function (result) {
+            if (result.status == -1) {
+                auther = false;
+                window.location.href = "login.html";
+            } else {
+                auther = true;
+                AdminId = result.bizObject.adminId;
+                name = result.bizObject.userName;
+                scope = result.bizObject.scope.split(",");
+                $("#userName").html("<small>当前用户：</small><big>" + result.bizObject.userName + "</big>")
+                $("#changepwdIcon").attr("onclick", "changepwd('修改密码'," + AdminId + ")");
+                $.post("/faurecia-launch/sys/getMenuByLevel", function (result) {
+                    menuList = result.bizObject;
+                    $("#menuList").empty();
+                    var pItem;
+                    for (var x in menuList) {
+                        var item = menuList[x];
+                        if (!item.pId) {
+                            if (x != 0) {
+                                pItem = $("<li id='item_" + item.id + "' class=''></li>")
+                            } else {
+                                pItem = $("<li id='item_" + item.id + "' class='active'></li>")
+                            }
+                            pItem.append("<a href='#' onclick=jump('" + item.url + "','" + item.id + "','p') class='dropdown-toggle'> <i class='icon-list'></i> <span class='menu-text'> " + item.name + " </span> <b class='arrow icon-angle-down'></b> </a>")
+                            pItem.append("<ul id='ff_" + item.id + "' class='submenu' style='display: none;'></ul>");
+                            $("#menuList").append(pItem);
+                        }
+                        if (item.pId) {
+                            $("#ff_" + item.pId).append("<li id='item_" + item.id + "'> <a  onclick=jump('" + item.url + "','" + item.id + "','" + item.pId + "') href='#'> <i class='icon-double-angle-right'></i>" + item.name + "</a> </li>");
+                        }
+                    }
+                })
+            }
+        })
+    })
+    var websocket = null;
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        //http://localhost:8080/AD/wx/createMenu
+        websocket = new WebSocket("ws://10.166.220.165:8080/faurecia-launch/websocket");
+//        websocket = new WebSocket("ws://192.168.67.145:8080/faurecia-launch/websocket");
+    }
+    else {
+//            alert('当前浏览器 Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        setMessageInnerHTML("WebSocket连接发生错误");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+        setMessageInnerHTML("WebSocket连接成功");
+
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function (event) {
+        setMessageInnerHTML(event.data);
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function () {
+        setMessageInnerHTML("WebSocket连接关闭");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+        closeWebSocket();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+//            alert(innerHTML);
+    }
+
+    //关闭WebSocket连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send(word) {
+//            var message = document.getElementById('text').value;
+        websocket.send(word);
+    }
+
+    function jump(src, id, level) {
+        if (level == "p") {
+            $(".active").attr("class", "");
+            $("#item_" + id).attr("class", "active open");
+        } else {
+            $(".active").attr("class", "");
+            $("#item_" + id).attr("class", "active");
+            $("#item_" + level).attr("class", "active open");
+        }
+
+        $("#content-src").attr("src", src);
+    }
+    function getsession() {
+        $.post("../../sys/getSession", function (result) {
+            if (result.status == -1) {
+                auther = false;
+                window.location.href = "login.html";
+            } else {
+                scope = result.bizObject.scope.split(",");
+                auther = true;
+            }
+        })
+    }
+    function checkOldPwd() {
+        $.post("../../admin/checkOldPwd", {adminId: AdminId, pwd: $("#old-pwd").val()}, function (res) {
+            if (res.status != 1) {
+                auther = false;
+                $("#old-tip").html("密码不正确");
+            } else {
+                auther = true;
+                $("#old-tip").html("");
+            }
+        })
+    }
+    function checkRepeat() {
+        if ($("#new-pwd").val() != $("#repeat-pwd").val()) {
+            $("#repeat-tip").html("两次输入密码不相同");
+            auther = false;
+        } else {
+            $("#repeat-tip").html("");
+            auther = true;
+        }
+
+    }
+    function changepwd(title, id) {
+        var form = $("<form id='changepwd' class='form-inline'></form>");
+        form.append("" +
+            "<div><input type='password' id='old-pwd'    onblur='checkOldPwd()' placeholder='请输入旧密码' class='form-control' required autofocus></div><div id='old-tip' class='red'></div><br> " +
+            "<div><input type='password' id='new-pwd'    onblur='checkRepeat()' placeholder='请输入新密码' class='form-control'></div><div id='new-tip' class='red'></div> <br>" +
+            "<div><input type='password' id='repeat-pwd' onblur='checkRepeat()' placeholder='请确认新密码' class='form-control'></div><div id='repeat-tip' class='red'></div><br> " +
+            "");
+
+
+        var div = bootbox.dialog({
+            title: title,
+            message: form,
+            animate: true,
+            buttons: {
+                "change": {
+                    "label": "<i class='icon-trash'></i> 修改",
+                    "className": "btn-sm btn-success",
+                    "callback": function () {
+                        $("#old-tip").html("");
+                        $("#new-tip").html("");
+                        $("#repeat-tip").html("");
+                        if (!$("#old-pwd").val()) {
+                            $("#old-tip").html("请输入旧密码");
+                            return false;
+                        }
+                        if (!$("#new-pwd").val()) {
+                            $("#new-tip").html("请输入新密码");
+                            return false;
+                        }
+                        if (!$("#repeat-pwd").val()) {
+                            $("#repeat-tip").html("请再次输入密码");
+                            return false;
+                        }
+                        if ($("#new-pwd").val() != $("#repeat-pwd").val()) {
+                            $("#repeat-tip").html("两次输入密码不相同");
+                            return false;
+                        }
+                        if (!auther) {
+                            return false;
+                        }
+                        $.post("/faurecia-launch/admin/changePWD", {adminId: AdminId, pwd: $("#new-pwd").val()}, function (result) {
+                            if (result.status == 1) {
+                                bootbox.alert("操作成功！");
+                            } else {
+                                bootbox.alert("操作失败！");
+                            }
+                        })
+
+                    }
+                },
+                "close": {
+                    "label": "<i class='icon-remove'></i> 取消",
+                    "className": "btn-sm"
+                }
+            }
+
+        });
+
+    }
+    $("#logOut").click(function () {
+        $.post("../../sys/removeSession", function (result) {
+            window.location.href = "login.html";
+        })
+    })
+</script>
+
+</body>
+</html>
