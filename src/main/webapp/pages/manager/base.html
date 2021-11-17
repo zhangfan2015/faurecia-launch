@@ -4,8 +4,8 @@
     <meta charset="utf-8"/>
     <title>佛吉亚</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
-    <script src="/faurecia-launch/pages/manager/assets/js/base.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css"/>
+    <script src="assets/js/base.js"></script>
 </head>
 
 <body>
@@ -19,14 +19,14 @@
 
     <div class="navbar-container" id="navbar-container">
         <div class="navbar-header pull-left">
-            <img id="faureciaLogo" class="nav-user-photo" src="/faurecia-launch/pages/image/china_faurecia.png" alt="Jason's Photo"/>
+            <img id="faureciaLogo" class="nav-user-photo" src="../image/china_faurecia.png" alt="faurecia.png"/>
         </div><!-- /.navbar-header -->
 
         <div class="navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo" src="/faurecia-launch/pages/manager/assets/avatars/user.jpg" alt=""/>
+                        <img class="nav-user-photo" src="assets/avatars/user.jpg" alt=""/>
                         <span id="userName" class="user-info">
 								</span>
 
@@ -141,7 +141,7 @@
 
             </div>
             <div class="page-content">
-                <iframe id="content-src" src="/faurecia-launch/pages/manager/base-blank.html" style="width: 101%;border: none"></iframe>
+                <iframe id="content-src" src="base-blank.html" style="width: 101%;border: none"></iframe>
             </div>
 
         </div><!-- /.main-content -->
@@ -180,7 +180,7 @@
                 scope = result.bizObject.scope.split(",");
                 $("#userName").html("<small>当前用户：</small><big>" + result.bizObject.userName + "</big>")
                 $("#changepwdIcon").attr("onclick", "changepwd('修改密码'," + AdminId + ")");
-                $.post("/faurecia-launch/sys/getMenuByLevel", function (result) {
+                $.post("../../sys/getMenuByLevel", function (result) {
                     menuList = result.bizObject;
                     $("#menuList").empty();
                     var pItem;
@@ -207,9 +207,7 @@
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        //http://localhost:8080/AD/wx/createMenu
-        websocket = new WebSocket("ws://10.166.220.165:8080/faurecia-launch/websocket");
-//        websocket = new WebSocket("ws://192.168.67.145:8080/faurecia-launch/websocket");
+        websocket = new WebSocket("ws://${websocket}/faurecia-launch/websocket");
     }
     else {
 //            alert('当前浏览器 Not support websocket')
@@ -341,7 +339,7 @@
                         if (!auther) {
                             return false;
                         }
-                        $.post("/faurecia-launch/admin/changePWD", {adminId: AdminId, pwd: $("#new-pwd").val()}, function (result) {
+                        $.post("../../admin/changePWD", {adminId: AdminId, pwd: $("#new-pwd").val()}, function (result) {
                             if (result.status == 1) {
                                 bootbox.alert("操作成功！");
                             } else {

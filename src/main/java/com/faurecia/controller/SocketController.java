@@ -39,7 +39,7 @@ public class SocketController {
         this.session = session;
         HttpSession httpSession= (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         this.httpSession = httpSession;
-        System.out.print(httpSession.getAttribute("userName"));
+        System.out.println(httpSession.getAttribute("userName"));
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());

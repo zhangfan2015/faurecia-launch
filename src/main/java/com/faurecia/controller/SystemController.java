@@ -53,7 +53,7 @@ public class SystemController {
      */
     @ResponseBody
     @RequestMapping(value="/getSession",produces = "text/json;charset=UTF-8")
-    public String getSession(HttpSession session) throws Exception{
+    public String getSession(HttpSession session){
         BaseResult result = new BaseResult();
         Author vo = new Author();
         try {
@@ -69,7 +69,7 @@ public class SystemController {
             result.setBizObject(vo);
         }catch (Exception e){
             result.setStatus(-1);
-            throw new Exception();
+            e.printStackTrace();
         }
         return new Gson().toJson(result);
     }

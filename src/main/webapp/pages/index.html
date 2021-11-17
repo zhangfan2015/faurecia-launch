@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/jquery-2.0.3.min.js'></script>
-    <link rel="stylesheet" type="text/css" href="/faurecia-launch/pages/css/basic.css">
-    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
-    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/bootstrap.min.js'></script>
-    <script src="/faurecia-launch/pages/manager/assets/js/bootbox.min.js"></script>
+    <title>佛吉亚电子看板</title>
+    <script type='text/javascript' src='js/jquery-3.3.1.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="css/basic.css">
+    <link rel="stylesheet" href="manager/assets/css/base.css"/>
+    <script type='text/javascript' src='manager/assets/js/bootstrap.min.js'></script>
+    <script src="manager/assets/js/bootbox.min.js"></script>
 </head>
 <body>
 <script type="text/javascript">
@@ -31,12 +32,11 @@
 
     });
 
-    var websocket = null;
+
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
         //http://localhost:8080/AD/wx/createMenu
-//        websocket = new WebSocket("ws://192.168.67.145:8080/faurecia-launch/websocket");
-        websocket = new WebSocket("ws://10.166.199.28:8080/faurecia-launch/websocket");
+        websocket = new WebSocket("ws://${websocket}/faurecia-launch/websocket");
     }
     else {
 //            alert('当前浏览器 Not supcport websocket')
@@ -97,7 +97,7 @@
                     $("#pdfList").append("<div onclick=showpdf('"+launch.id+"') class='pdf-item'> " +
                         "<div class='pdf-name' >"+launch.launchType+"</div> " +
                         "<div class='pdf-back'></div> " +
-                        "<embed class='pdf-file'  src='"+launch.fileUrl+"' type='application/pdf'  ></embed> " +
+                        "<embed class='pdf-file'  src='../"+launch.fileUrl+"' type='application/pdf'  ></embed> " +
                         "</div>")
                 }
                 $("#logo1").show();
@@ -133,7 +133,7 @@
                     "<div class='scoll-son'> " ;
                     for (var x in program.piclist) {
                         var pic = program.piclist[x];
-                        htmlString+="<img onclick=showpic('"+pic.picUrl+"') class='pic-file'  src='"+pic.picUrl+"'  /> ";
+                        htmlString+="<img onclick=showpic('"+pic.picUrl+"') class='pic-file'  src='../"+pic.picUrl+"'  /> ";
                     }
                     htmlString+="</div> " +
                         "</div> </div>" ;
@@ -159,7 +159,7 @@
                     "<div class='scoll-son'>";
                     for (var x in program.piclist) {
                         var pic = program.piclist[x];
-                        htmlString+="<img onclick=showpic('"+pic.picUrl+"') class='pic-file'  src='"+pic.picUrl+"'  /> ";
+                        htmlString+="<img onclick=showpic('"+pic.picUrl+"') class='pic-file'  src='../"+pic.picUrl+"'  /> ";
                     }
                     htmlString+="</div> " +
                     "</div></div> " ;
@@ -175,7 +175,7 @@
 
     }
     function showpic(url) {
-        var form = $("<img style='height: 500px;margin: auto' src='"+url+"'  />");
+        var form = $("<img style='height: 500px;width:100%;margin: auto' src='../"+url+"'  />");
         var div = bootbox.dialog({
             title:"图片详情",
             message: form,
@@ -192,7 +192,7 @@
 
     function showpdf(id) {
         $.post("../launch/getPdfById",{id:id},function (result) {
-            var form = $("<embed class='bigpdf'style='width: 99%;height: 500px' src='"+result.bizObject.fileUrl+"' type='application/pdf'  ></embed>");
+            var form = $("<embed class='bigpdf'style='width: 99%;height: 500px' src='../"+result.bizObject.fileUrl+"' type='application/pdf'  ></embed>");
             var div = bootbox.dialog({
                 title: result.bizObject.name,
                 message: form,
@@ -279,8 +279,8 @@ zoom: 1;"/>
 <div id="title" class="title">
     <img id="logo1"  src="image/log5.png" style="position: fixed;left: 3%" onload="loadImage(this)">
     <div onClick="initProgram()"style="text-align: center;width: 100%;display: flex;flex-direction: column;">
-        <div style="color: gainsboro;font-size: 100rem;overflow-y: hidden">FCM QD PROGRAM LAUNCH BOARD</div>
-        <div style="color: #687dae;font-size: 30rem;overflow-y: hidden">Fauriecia Exhaust Systems QingDao Co.,Ltd.</div>
+        <div style="color: gainsboro;font-size: 100rem;overflow-y: hidden">FCM ${plant} PROGRAM LAUNCH BOARD</div>
+        <div style="color: #687dae;font-size: 30rem;overflow-y: hidden">Fauriecia Exhaust Systems ${city} Co.,Ltd.</div>
     </div>
 </div>
 <div id="pdfList" class="pdfList">

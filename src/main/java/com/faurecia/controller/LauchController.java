@@ -207,9 +207,9 @@ public class LauchController {
 //                result.setMessage("只能上传pdf文件！");
 //                return  new Gson().toJson(result);
 //            }
-            String baseUrl = session.getServletContext().getRealPath("/")+"pages\\Launch_pdf_local";
+            String baseUrl = session.getServletContext().getRealPath("/")+"pages/Launch_pdf_local";
             fileName=fileName.substring(0,fileName.lastIndexOf("."))+"-"+System.currentTimeMillis()+"."+nameSuffix2;
-            File disFile = new File(baseUrl+"\\"+fileName);
+            File disFile = new File(baseUrl+"/"+fileName);
             File fileParent = disFile.getParentFile();
             if(!fileParent.exists()){
                 fileParent.mkdirs();
@@ -248,9 +248,9 @@ public class LauchController {
                 return  new Gson().toJson(result);
             }
 
-            String baseUrl = session.getServletContext().getRealPath("/")+"pages\\Launch_pic_local";
+            String baseUrl = session.getServletContext().getRealPath("/")+"pages/Launch_pic_local";
 
-            File disFile = new File(baseUrl+"\\"+fileName);
+            File disFile = new File(baseUrl+"/"+fileName);
             File fileParent = disFile.getParentFile();
             if(!fileParent.exists()){
                 fileParent.mkdirs();
@@ -260,7 +260,7 @@ public class LauchController {
             pic.setPicUrl(fileName);
             pic.setProgramId(Integer.valueOf(programId));
             dao.save(pic);
-            pic.setPicUrl("http://"+ InetAddress.getLocalHost().getHostAddress()+":8080/faurecia-launch/pages/Launch_pic_local/"+fileName);
+            pic.setPicUrl("pages/Launch_pic_local/"+fileName);
             result.setBizObject(pic);
             for(SocketController item: SocketController.webSocketSet){
                 if(item.getHttpSession().getAttribute("userName").equals("launch")){
@@ -304,9 +304,9 @@ public class LauchController {
                 result.setMessage("系统内已有同名文件！");
                 return  new Gson().toJson(result);
             }
-            String baseUrl = session.getServletContext().getRealPath("/")+"pages\\Launch_pic_local";
+            String baseUrl = session.getServletContext().getRealPath("/")+"pages/Launch_pic_local";
 
-            File disFile = new File(baseUrl+"\\"+fileName);
+            File disFile = new File(baseUrl+"/"+fileName);
             File fileParent = disFile.getParentFile();
             if(!fileParent.exists()){
                 fileParent.mkdirs();
@@ -316,7 +316,7 @@ public class LauchController {
             pic.setPicUrl(fileName);
             pic.setProgramId(Integer.valueOf(id));
             dao.save(pic);
-            pic.setPicUrl("http://"+ InetAddress.getLocalHost().getHostAddress()+":8080/faurecia-launch/pages/Launch_pic_local/"+fileName);
+            pic.setPicUrl("pages/Launch_pic_local/"+fileName);
             result.setBizObject(pic);
 //            for(SocketController item: SocketController.webSocketSet){
 //                if(item.getHttpSession().getAttribute("userName").equals("launch")){
@@ -435,7 +435,7 @@ public class LauchController {
         BaseResult result = new BaseResult();
         try {
             BLaunchFileEntity file = dao.findById(BLaunchFileEntity.class,Integer.parseInt(String.valueOf(vo.getId())));
-            file.setFileUrl("http://"+ InetAddress.getLocalHost().getHostAddress()+":8080/faurecia-launch/pages/Launch_pdf_local/"+file.getFileUrl());
+            file.setFileUrl("pages/Launch_pdf_local/"+file.getFileUrl());
             result.setBizObject(file);
 
         }catch (Exception e){
@@ -477,7 +477,7 @@ public class LauchController {
                         BLaunchFileEntity type = dao.findById(BLaunchFileEntity.class,Integer.parseInt(id));
                         type.setIsDel("0");
                         type.setDelTime(System.currentTimeMillis());
-                        dao.update(type);
+                        dao.del(BLaunchFileEntity.class,type.getId());
                     }
                     break;
                 }
@@ -525,7 +525,7 @@ public class LauchController {
         try{
             List<BLaunchProgramPicEntity> pics =dao.findAll("from b_launch_program_pic where programId="+vo.getId());
             for (BLaunchProgramPicEntity pic:pics){
-                pic.setPicUrl("http://"+ InetAddress.getLocalHost().getHostAddress()+":8080/faurecia-launch/pages/Launch_pic_local/"+pic.getPicUrl());
+                pic.setPicUrl("pages/Launch_pic_local/"+pic.getPicUrl());
             }
             result.setBizObject(pics);
         }catch (Exception e){
@@ -646,7 +646,7 @@ public class LauchController {
                 launchvo.setDis(String.valueOf(launch[1]));
                 launchvo.setId(String.valueOf(launch[3]));
                 launchvo.setLaunchType(String.valueOf(launch[4]));
-                launchvo.setFileUrl("http://"+ InetAddress.getLocalHost().getHostAddress()+":8080/faurecia-launch/pages/Launch_pdf_local/"+String.valueOf(launch[2]));
+                launchvo.setFileUrl("pages/Launch_pdf_local/"+String.valueOf(launch[2]));
                 voList.add(launchvo);
             }
             result.setBizObject(voList);
@@ -668,12 +668,13 @@ public class LauchController {
         session.setAttribute("userName","launch");
         session.setAttribute("adminId",null);
         session.setAttribute("role","");
+
         try {
             List<BLaunchProgramEntity> programList =dao.findAll(" from b_launch_program p where p.isDel=1 AND p.isDisplay=0 order by p.indexNo asc ");
             for (BLaunchProgramEntity programEntity:programList){
                 List<BLaunchProgramPicEntity> pics =dao.findAll("from b_launch_program_pic where programId="+programEntity.getId());
                 for (BLaunchProgramPicEntity pic:pics){
-                    pic.setPicUrl("http://"+ InetAddress.getLocalHost().getHostAddress()+":8080/faurecia-launch/pages/Launch_pic_local/"+pic.getPicUrl());
+                    pic.setPicUrl("pages/Launch_pic_local/"+pic.getPicUrl());
                 }
                 programEntity.setPiclist(pics);
             }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true" scan="true" scanPeriod="0.001 seconds">
 
-    <property name="APP_Name" value="faurecia-launch" />
+    <property name="APP_Name" value="E-launch" />
     <property name="LOG_HOME" value="logs/" />
     <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
 

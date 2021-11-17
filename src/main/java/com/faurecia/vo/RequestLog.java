@@ -11,7 +11,10 @@ import org.codehaus.jackson.annotate.JsonBackReference;
 public class RequestLog {
     @Expose
     private String methodName;
+    @Expose
+    private String ip;
     @JsonBackReference
     private Object[] param;
+
 
 }

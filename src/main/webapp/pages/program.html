@@ -1,10 +1,10 @@
 <html>
 <head>
-    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/jquery-2.0.3.min.js'></script>
-    <link rel="stylesheet" type="text/css" href="/faurecia-launch/pages/css/basic.css">
-    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
-    <script type='text/javascript' src='/faurecia-launch/pages/manager/assets/js/bootstrap.min.js'></script>
-    <script src="/faurecia-launch/pages/manager/assets/js/bootbox.min.js"></script>
+    <script type='text/javascript' src='manager/assets/js/jquery-2.0.3.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="css/basic.css">
+    <link rel="stylesheet" href="manager/assets/css/base.css"/>
+    <script type='text/javascript' src='manager/assets/js/bootstrap.min.js'></script>
+    <script src="manager/assets/js/bootbox.min.js"></script>
 </head>
 <body>
 <script type="text/javascript">
@@ -31,9 +31,7 @@
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        //http://localhost:8080/AD/wx/createMenu
-//        websocket = new WebSocket("ws://192.168.67.145:8080/faurecia-launch/websocket");
-        websocket = new WebSocket("ws://10.166.220.165:8080/faurecia-launch/websocket");
+        websocket = new WebSocket("ws://${websocket}/faurecia-launch/websocket");
     }
     else {
 //            alert('当前浏览器 Not support websocket')
@@ -162,21 +160,7 @@
         objImg.height = h;
         objImg.width = w;
     }
-    function showpic() {
-        var form = $("<img style='width: 99%;height: 800px' src='http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg'  />");
-        var div = bootbox.dialog({
-            title:"图片详情",
-            message: form,
-            animate: true,
-            buttons: {
-                "close": {
-                    "label": "<i class='icon-remove'></i> 关闭",
-                    "className": "btn-sm"
-                }
-            }
 
-        });
-    }
 </script>
 <img src="image/bkground.jpg" style="position:fixed;
 top: 0;
@@ -188,70 +172,15 @@ zoom: 1;"/>
 <img id="logo1"  src="image/log5.png" style="position: fixed;margin-left: 40px;margin-top: 55px" onload="loadImage(this)">
 <div id="title" style="display: flex;margin: 60px auto 50px; flex-direction: row">
     <div style="text-align: center;width: 100%;display: flex;flex-direction: column">
-        <div style="color: gainsboro;font-size: 100rem">FCM CC PROGRAM LAUNCH BOARD</div>
-        <div style="color: #687dae;font-size: 30rem";>Fauriecia Exhaust Systems ChangChun Co.,Ltd.</div>
+        <div style="color: gainsboro;font-size: 100rem">FCM CD PROGRAM LAUNCH BOARD</div>
+        <div style="color: #687dae;font-size: 30rem";>Fauriecia Exhaust Systems Chengdu Co.,Ltd.</div>
     </div>
 </div>
 <div id="programList">
 
 
-    <div class="program-item">
-        <div class="program-name">项目名称项目名称项目名称项目名称</div>
-        <div class="pic-list">
-            <div class="scoll-son">
-                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-            </div>
 
-        </div>
 
-    </div>
-    <div class="program-item">
-        <div class="program-name">项目名称项目名称项目名称项目名称</div>
-        <div class="pic-list">
-            <div class="scoll-son">
-                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-            </div>
-
-        </div>
-
-    </div>
-    <div class="program-item">
-        <div class="program-name">项目名称项目名称项目名称项目名称</div>
-        <div class="pic-list">
-            <div class="scoll-son">
-                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-            </div>
-
-        </div>
-
-    </div>
-    <div class="program-item">
-        <div class="program-name">项目名称项目名称项目名称项目名称</div>
-        <div class="pic-list">
-            <div class="scoll-son">
-                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-            </div>
-
-        </div>
-
-    </div>
-    <div class="program-item">
-        <div class="program-name">项目名称项目名称项目名称项目名称</div>
-        <div class="pic-list">
-            <div class="scoll-son">
-                <img class="pic-file"  src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-                <img class="pic-file" src="http://192.168.1.61:8080/faurecia-launch/pages/Launch_pic_local/loglog.jpg"  />
-            </div>
-
-        </div>
-
-    </div>
 
 
 

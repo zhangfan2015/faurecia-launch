@@ -65,7 +65,7 @@
 
 }
 .program-name{
-    margin-left: 5%;
+    /*margin-left: 5%;*/
     height: 70px;
     line-height: 70px;
     font-size: 20px;
@@ -80,7 +80,7 @@
     overflow-y: hidden;
 }
 .pic-list{
-    height: 80px;
+    /*height: 80px;*/
     padding: 0 5%;
     overflow:scroll;
     overflow-x: auto;
@@ -91,6 +91,6 @@
 .element::-webkit-scrollbar {display:none}
 .pic-file{
     margin: 0 1.4%;
-    width: 100px;
-    height: 75px;
+    width: 25%;
+    /*height: 75px;*/
 }

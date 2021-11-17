@@ -4,15 +4,15 @@
     <meta charset="utf-8"/>
     <title>launch项目管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/base.css"/>
-    <script src="/faurecia-launch/pages/manager/assets/js/base.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css"/>
+    <script src="assets/js/base.js"></script>
 
-    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/datepicker.css">
-    <link rel="stylesheet" href="/faurecia-launch/pages/manager/assets/css/ui.jqgrid.css">
-    <script src="/faurecia-launch/pages/manager/assets/js/date-time/bootstrap-datepicker.min.js"></script>
-    <script src="/faurecia-launch/pages/manager/assets/js/jqGrid/i18n/grid.locale-cn.js"></script>
-    <script src="/faurecia-launch/pages/manager/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
-    <script type="text/javascript" src="/faurecia-launch/pages/manager/assets/js/ajaxfileupload.js"></script>
+    <link rel="stylesheet" href="assets/css/datepicker.css">
+    <link rel="stylesheet" href="assets/css/ui.jqgrid.css">
+    <script src="assets/js/date-time/bootstrap-datepicker.min.js"></script>
+    <script src="assets/js/jqGrid/i18n/grid.locale-cn.js"></script>
+    <script src="assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+    <script type="text/javascript" src="assets/js/ajaxfileupload.js"></script>
 
     <style type="text/css">
         .fileinput-button {
@@ -218,7 +218,7 @@
                     for(var x in result.bizObject){
                         var pic = result.bizObject[x]
                         form+="<div id='pic_"+pic.id+"' style='float:left;margin-top: 20px'> " +
-                                    "<img  alt='150x150' style='float: left;width:190px;height: 190px;margin-right: 40px' src='"+pic.picUrl+"'> " +
+                                    "<img  alt='150x150' style='float: left;width:190px;height: 190px;margin-right: 40px' src='../../"+pic.picUrl+"'> " +
                                     "<i onclick='delPic("+pic.id+")' class='icon-trash red ' style='left:-60px;top:10px;position: relative; z-index: 100'></i>"+
                                 "</div>" ;
                     }
@@ -278,7 +278,7 @@
                         bootbox.alert("上传成功！");
                         var pic = data.bizObject;
                         $("#picList").find('div').eq(0).before("<div id='pic_"+pic.id+"' style='float:left;margin-top: 20px'>" +
-                            "<img  alt='150x150' style='float: left;width:190px;height: 190px;margin-right: 40px' src='"+pic.picUrl+"'> " +
+                            "<img  alt='150x150' style='float: left;width:190px;height: 190px;margin-right: 40px' src='../../"+pic.picUrl+"'> " +
                             "<i onclick='delPic("+pic.id+")' class='icon-trash red ' style='left:-60px;top:10px;position: relative; z-index: 100'></i>"+
                             "</div>" );
                         if($("#picList").children().length>4){
@@ -314,7 +314,7 @@
                         bootbox.alert("上传成功！");
                         var pic = data.bizObject;
                         $("#picList").find('div').eq(0).before("<div id='pic_"+pic.id+"' style='float:left;margin-top: 20px'>" +
-                            "<img  alt='150x150' style='float: left;width:190px;height: 190px;margin-right: 40px' src='"+pic.picUrl+"'> " +
+                            "<img  alt='150x150' style='float: left;width:190px;height: 190px;margin-right: 40px' src='../../"+pic.picUrl+"'> " +
                             "<i onclick='delPic("+pic.id+")' class='icon-trash red ' style='left:-50px;top:10px;position: relative; z-index: 100'></i>"+
                             "</div>" );
                         if($("#picList").children().length>4){
